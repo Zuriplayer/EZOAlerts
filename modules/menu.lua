@@ -46,9 +46,21 @@ local function GetOptions()
         {
             type    = "checkbox",
             name    = GetString(EZOA_OPTION_ALERTS_ENABLED),
-            getFunc = function() return EZOA.sv.alerts.enabled ~= false end,
-            setFunc = function(value) EZOA.sv.alerts.enabled = value == true end,
+            getFunc = function() return EZOA.sv.channels.screen ~= false end,
+            setFunc = function(value)
+                EZOA.sv.channels.screen = value == true
+                EZOA.sv.alerts.enabled = value == true
+            end,
             default = true,
+            width   = "full",
+        },
+        {
+            type    = "checkbox",
+            name    = GetString(EZOA_OPTION_GROUP_CHAT_ENABLED),
+            tooltip = GetString(EZOA_OPTION_GROUP_CHAT_ENABLED_TOOLTIP),
+            getFunc = function() return EZOA.sv.channels.groupChat == true end,
+            setFunc = function(value) EZOA.sv.channels.groupChat = value == true end,
+            default = false,
             width   = "full",
         },
         {
@@ -97,6 +109,17 @@ local function GetOptions()
             func    = function()
                 if EZOAlerts.ShowAlert then
                     EZOAlerts.ShowAlert(GetString(EZOA_TEST_ALERT_TEXT), EZOAlerts.ALERT_KIND_INFO)
+                end
+            end,
+            width   = "full",
+        },
+        {
+            type    = "button",
+            name    = GetString(EZOA_OPTION_TEST_GROUP_CHAT),
+            tooltip = GetString(EZOA_OPTION_TEST_GROUP_CHAT_TOOLTIP),
+            func    = function()
+                if EZOAlerts.SendGroupAlert then
+                    EZOAlerts.SendGroupAlert(GetString(EZOA_TEST_GROUP_CHAT_TEXT))
                 end
             end,
             width   = "full",

@@ -34,6 +34,8 @@ try {
         "modules/saved_vars.lua",
         "modules/alert_registry.lua",
         "modules/renderer.lua",
+        "modules/group_chat.lua",
+        "modules/channels.lua",
         "modules/menu.lua"
     )
 

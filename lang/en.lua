@@ -10,6 +10,8 @@ EZOALERTS_STRINGS_EN = {
 
     EZOA_OPTION_ALERTS = "Alerts",
     EZOA_OPTION_ALERTS_ENABLED = "Enable on-screen alerts",
+    EZOA_OPTION_GROUP_CHAT_ENABLED = "Enable group chat alerts",
+    EZOA_OPTION_GROUP_CHAT_ENABLED_TOOLTIP = "Allows configured events to send messages to group chat. Events still decide whether group chat is appropriate.",
     EZOA_OPTION_DURATION = "Duration",
     EZOA_OPTION_DURATION_TOOLTIP = "Milliseconds before the alert hides automatically.",
     EZOA_OPTION_SCALE = "Alert scale",
@@ -18,5 +20,8 @@ EZOALERTS_STRINGS_EN = {
     EZOA_OPTION_ANCHOR_TOP = "Top",
     EZOA_OPTION_ANCHOR_BOTTOM = "Bottom",
     EZOA_OPTION_TEST_ALERT = "Show test alert",
+    EZOA_OPTION_TEST_GROUP_CHAT = "Send test group message",
+    EZOA_OPTION_TEST_GROUP_CHAT_TOOLTIP = "Only sends if you are in a group.",
     EZOA_TEST_ALERT_TEXT = "EZOAlerts test alert",
+    EZOA_TEST_GROUP_CHAT_TEXT = "EZOAlerts test group message",
 }

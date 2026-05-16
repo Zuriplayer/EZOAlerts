@@ -63,6 +63,14 @@ function EZOA:Initialize()
         EZOAlerts_Renderer.Init()
     end
 
+    if EZOAlerts_GroupChat and EZOAlerts_GroupChat.Init then
+        EZOAlerts_GroupChat.Init()
+    end
+
+    if EZOAlerts_Channels and EZOAlerts_Channels.Init then
+        EZOAlerts_Channels.Init()
+    end
+
     if EZOAlerts_Menu and EZOAlerts_Menu.Init then
         EZOAlerts_Menu.Init()
     end

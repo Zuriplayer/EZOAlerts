@@ -17,6 +17,10 @@ function MOD.GetDefaults()
             offsetX = 0,
             offsetY = -180,
         },
+        channels = {
+            screen = true,
+            groupChat = false,
+        },
     }
 end
 

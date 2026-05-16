@@ -21,27 +21,59 @@ function REG.Get(id)
     return REG._alerts and REG._alerts[tostring(id or "")] or nil
 end
 
-function REG.Show(id, context)
+local function ResolveValue(value, context)
+    if type(value) == "function" then
+        return value(context)
+    end
+    return value
+end
+
+local function BuildPayload(definition, context)
+    local payload = {
+        text = ResolveValue(definition.text, context),
+        screenText = ResolveValue(definition.screenText, context),
+        groupText = ResolveValue(definition.groupText, context),
+        kind = definition.kind or (EZOAlerts and EZOAlerts.ALERT_KIND_INFO) or "info",
+        options = definition.options,
+    }
+
+    payload.screenText = payload.screenText or payload.text
+    payload.groupText = payload.groupText or payload.text
+    return payload
+end
+
+function REG.Trigger(id, context)
     local definition = REG.Get(id)
     if not definition then
         return false
     end
 
-    local text = definition.text
-    if type(text) == "function" then
-        text = text(context)
-    end
-
-    local kind = definition.kind or (EZOAlerts and EZOAlerts.ALERT_KIND_INFO) or "info"
-    if EZOAlerts_Renderer and EZOAlerts_Renderer.Show then
-        return EZOAlerts_Renderer.Show(text, kind, definition.options)
+    local payload = BuildPayload(definition, context)
+    if EZOAlerts_Channels and EZOAlerts_Channels.Dispatch then
+        return EZOAlerts_Channels.Dispatch(payload, definition.channels)
     end
     return false
 end
 
 function EZOAlerts.ShowAlert(text, kind, options)
-    if EZOAlerts_Renderer and EZOAlerts_Renderer.Show then
-        return EZOAlerts_Renderer.Show(text, kind, options)
+    if EZOAlerts_Channels and EZOAlerts_Channels.Dispatch then
+        return EZOAlerts_Channels.Dispatch({
+            text = text,
+            screenText = text,
+            kind = kind or EZOAlerts.ALERT_KIND_INFO,
+            options = options,
+        }, { screen = true })
+    end
+    return false
+end
+
+function EZOAlerts.SendGroupAlert(text, options)
+    if EZOAlerts_Channels and EZOAlerts_Channels.Dispatch then
+        return EZOAlerts_Channels.Dispatch({
+            text = text,
+            groupText = text,
+            options = options,
+        }, { groupChat = true })
     end
     return false
 end
@@ -51,5 +83,5 @@ function EZOAlerts.RegisterAlert(id, definition)
 end
 
 function EZOAlerts.TriggerAlert(id, context)
-    return REG.Show(id, context)
+    return REG.Trigger(id, context)
 end

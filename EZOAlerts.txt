@@ -1,8 +1,8 @@
 ## Title: E|cB040FFZ|rOAlerts
 ## Author: @Zuriplayer
-## Description: Modular on-screen alerts for the EZO addon family.
-## Version: 0.1.0
-## AddOnVersion: 10000
+## Description: Modular screen and group chat alerts for the EZO addon family.
+## Version: 0.1.1
+## AddOnVersion: 10001
 ## APIVersion: 101049 101050
 ## DependsOn: LibAddonMenu-2.0
 ## OptionalDependsOn: LibChatMessage
@@ -16,4 +16,6 @@ modules/core.lua
 modules/saved_vars.lua
 modules/alert_registry.lua
 modules/renderer.lua
+modules/group_chat.lua
+modules/channels.lua
 modules/menu.lua

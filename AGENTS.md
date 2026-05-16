@@ -8,6 +8,7 @@ El entorno Lua de ESO es limitado. El objetivo es mantener `EZOAlerts` pequeno, 
 
 - Addon independiente: `EZOAlerts`.
 - Avisos visuales en pantalla.
+- Mensajes controlados al chat de grupo.
 - Panel LibAddonMenu como unica interfaz de configuracion.
 - Dos idiomas: ingles y espanol, con opcion `Automatico`.
 - Sin menues laterales.
@@ -28,8 +29,11 @@ El entorno Lua de ESO es limitado. El objetivo es mantener `EZOAlerts` pequeno, 
 ## Arquitectura
 
 - Productores de avisos no deben crear controles UI directamente.
-- Productores llaman a `EZOAlerts.ShowAlert`, `EZOAlerts.RegisterAlert` o `EZOAlerts.TriggerAlert`.
+- Productores no deben llamar a `StartChatInput` directamente.
+- Productores llaman a `EZOAlerts.ShowAlert`, `EZOAlerts.SendGroupAlert`, `EZOAlerts.RegisterAlert` o `EZOAlerts.TriggerAlert`.
+- `channels.lua` decide si una alerta sale por pantalla, chat de grupo o ambos.
 - `renderer.lua` es la unica capa que dibuja controles en pantalla.
+- `group_chat.lua` es la unica capa que envia mensajes al chat de grupo.
 - `menu.lua` solo registra opciones LAM y no debe contener reglas de negocio.
 - `saved_vars.lua` centraliza defaults.
 
@@ -77,4 +81,5 @@ Siempre indicar:
 - Apertura del panel LAM.
 - Cambio de idioma.
 - Boton de aviso de prueba.
+- Boton de mensaje de grupo de prueba en grupo.
 - Teclado y gamepad sin cambios de input.
