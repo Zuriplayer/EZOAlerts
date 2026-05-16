@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "addon": {
+    "id": "ezoalerts",
+    "name": "EZOAlerts",
+    "version": "0.1.0",
+    "status": "alpha",
+    "phase": "scaffold",
+    "visibility": "public",
+    "manifest": "EZOAlerts.txt",
+    "package": {
+      "rootFolderName": "EZOAlerts",
+      "zipName": "EZOAlerts_v0.1.0.zip",
+      "outputPath": "dist",
+      "include": [
+        "*.txt",
+        "*.lua",
+        "modules/**",
+        "lang/**",
+        "libs/**",
+        "media/**",
+        "textures/**",
+        "fonts/**"
+      ],
+      "exclude": [
+        ".git/**",
+        ".github/**",
+        ".vscode/**",
+        "dev/**",
+        "docs/**",
+        "tools/**",
+        "tests/**",
+        "dist/**",
+        "*.md",
+        "*.ps1",
+        "*.log",
+        "*.tmp",
+        "*.bak"
+      ]
+    }
+  }
+}

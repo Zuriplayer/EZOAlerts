@@ -1,0 +1,26 @@
+# Future EZOTools Integration
+
+`EZOAlerts` se ha estructurado para poder integrarse dentro de `EZOTools` sin reescribir el nucleo.
+
+## Integracion prevista
+
+- `modules/alert_registry.lua` -> modulo de dominio de avisos.
+- `modules/renderer.lua` -> capa visual reutilizable o adaptada al overlay de EZOTools.
+- `modules/menu.lua` -> seccion LAM registrada dentro del sistema de settings de EZOTools.
+- `lang/*.lua` -> claves `EZOA_*` migrables o aliasables.
+
+## Reglas para facilitar la migracion
+
+- Mantener API publica pequena.
+- No depender de rutas de addon hardcodeadas.
+- No mezclar avisos con menues laterales.
+- No asumir keybindings.
+- Evitar estados globales fuera de `EZOAlerts`.
+
+## Superficie publica
+
+```lua
+EZOAlerts.ShowAlert(text, kind, options)
+EZOAlerts.RegisterAlert(id, definition)
+EZOAlerts.TriggerAlert(id, context)
+```

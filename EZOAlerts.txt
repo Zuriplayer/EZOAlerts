@@ -1,0 +1,19 @@
+## Title: E|cB040FFZ|rOAlerts
+## Author: @Zuriplayer
+## Description: Modular on-screen alerts for the EZO addon family.
+## Version: 0.1.0
+## AddOnVersion: 10000
+## APIVersion: 101049 101050
+## DependsOn: LibAddonMenu-2.0
+## OptionalDependsOn: LibChatMessage
+## SavedVariables: EZOAlerts_Saved
+
+lang/en.lua
+lang/es.lua
+modules/i18n.lua
+EZOAlerts.lua
+modules/core.lua
+modules/saved_vars.lua
+modules/alert_registry.lua
+modules/renderer.lua
+modules/menu.lua
