@@ -1,4 +1,4 @@
--- Minimal i18n layer for EZOAlerts.
+-- Capa pequena de idiomas para EZOAlerts.
 EZOAlerts_Lang = EZOAlerts_Lang or {}
 
 local function ApplyString(id, value, version)

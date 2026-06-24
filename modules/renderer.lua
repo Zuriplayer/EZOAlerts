@@ -1,4 +1,4 @@
--- On-screen alert renderer for EZOAlerts.
+-- Aviso visual en pantalla.
 EZOAlerts_Renderer = EZOAlerts_Renderer or {}
 local MOD = EZOAlerts_Renderer
 
@@ -16,6 +16,43 @@ local function ResolveAnchor(anchorName)
     if anchorName == "TOP" then return TOP end
     if anchorName == "BOTTOM" then return BOTTOM end
     return CENTER
+end
+
+local function IsHudScene()
+    if not SCENE_MANAGER or type(SCENE_MANAGER.GetCurrentScene) ~= "function" then
+        return false
+    end
+
+    local scene = SCENE_MANAGER:GetCurrentScene()
+    if not scene or type(scene.GetName) ~= "function" then
+        return false
+    end
+
+    local sceneName = scene:GetName()
+    return sceneName == "hud" or sceneName == "hudui"
+end
+
+local function RegisterSceneFragments(control)
+    if MOD.sceneFragmentsRegistered then
+        return
+    end
+
+    if ZO_SimpleSceneFragment and HUD_SCENE and HUD_UI_SCENE then
+        local fragment = ZO_SimpleSceneFragment:New(control)
+        HUD_SCENE:AddFragment(fragment)
+        HUD_UI_SCENE:AddFragment(fragment)
+        MOD.sceneFragment = fragment
+    end
+
+    if SCENE_MANAGER and type(SCENE_MANAGER.RegisterCallback) == "function" then
+        SCENE_MANAGER:RegisterCallback("SceneStateChanged", function()
+            if EZOAlerts_Renderer and EZOAlerts_Renderer.RefreshVisibility then
+                EZOAlerts_Renderer.RefreshVisibility()
+            end
+        end)
+    end
+
+    MOD.sceneFragmentsRegistered = true
 end
 
 local function EnsureControl()
@@ -45,6 +82,7 @@ local function EnsureControl()
     MOD.control = control
     MOD.backdrop = backdrop
     MOD.label = label
+    RegisterSceneFragments(control)
     return control
 end
 
@@ -59,17 +97,33 @@ end
 function MOD.Init()
     EnsureControl()
     ApplyPlacement()
+    MOD.RefreshVisibility()
 end
 
 function MOD.Refresh()
     ApplyPlacement()
+    MOD.RefreshVisibility()
 end
 
 function MOD.Hide()
     EVENT_MANAGER:UnregisterForUpdate(UPDATE_NAME)
+    MOD.isShowing = false
     if MOD.control then
         MOD.control:SetHidden(true)
     end
+end
+
+function MOD.RefreshVisibility()
+    if not MOD.control then
+        return
+    end
+
+    if not IsHudScene() then
+        MOD.control:SetHidden(true)
+        return
+    end
+
+    MOD.control:SetHidden(MOD.isShowing ~= true)
 end
 
 function MOD.Show(text, kind, options)
@@ -83,6 +137,11 @@ function MOD.Show(text, kind, options)
         return false
     end
 
+    if not IsHudScene() then
+        MOD.Hide()
+        return false
+    end
+
     local control = EnsureControl()
     ApplyPlacement()
 
@@ -90,7 +149,8 @@ function MOD.Show(text, kind, options)
     local color = colors[kind] or colors.info
     MOD.label:SetText(text)
     MOD.label:SetColor(color[1], color[2], color[3], color[4])
-    control:SetHidden(false)
+    MOD.isShowing = true
+    MOD.RefreshVisibility()
 
     local durationMs = options and tonumber(options.durationMs) or (sv and tonumber(sv.durationMs)) or 2500
     if durationMs > 0 then

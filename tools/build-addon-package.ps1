@@ -32,10 +32,16 @@ try {
         "modules/i18n.lua",
         "modules/core.lua",
         "modules/saved_vars.lua",
+        "modules/log.lua",
         "modules/alert_registry.lua",
         "modules/renderer.lua",
         "modules/group_chat.lua",
         "modules/channels.lua",
+        "modules/producers.lua",
+        "modules/producers/chests.lua",
+        "modules/producers/heavy_sacks.lua",
+        "modules/producers/group_guilds.lua",
+        "modules/producers/group_leader_zone.lua",
         "modules/menu.lua"
     )
 

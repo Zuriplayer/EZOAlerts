@@ -1,4 +1,4 @@
--- LibAddonMenu panel for EZOAlerts.
+-- Panel de opciones de EZOAlerts en LibAddonMenu.
 EZOAlerts_Menu = EZOAlerts_Menu or {}
 local MENU = EZOAlerts_Menu
 
@@ -15,6 +15,49 @@ local function WarnForcedLanguage()
     if EZOAlerts and type(EZOAlerts.Print) == "function" then
         EZOAlerts.Print(GetString(EZOA_MSG_LANGUAGE_FORCED_WARNING))
     end
+end
+
+local function GetChestSettings()
+    EZOAlerts.sv.producers = EZOAlerts.sv.producers or {}
+    EZOAlerts.sv.producers.chests = EZOAlerts.sv.producers.chests or {}
+
+    local settings = EZOAlerts.sv.producers.chests
+    if settings.enabled == nil then settings.enabled = true end
+    if settings.groupChat == nil then settings.groupChat = true end
+    if settings.minIntervalMs == nil then settings.minIntervalMs = 15000 end
+    return settings
+end
+
+local function GetGroupGuildSettings()
+    EZOAlerts.sv.producers = EZOAlerts.sv.producers or {}
+    EZOAlerts.sv.producers.groupGuilds = EZOAlerts.sv.producers.groupGuilds or {}
+
+    local settings = EZOAlerts.sv.producers.groupGuilds
+    if settings.enabled == nil then settings.enabled = true end
+    if settings.suppressWhenLeaderSharesGuild == nil then settings.suppressWhenLeaderSharesGuild = true end
+    return settings
+end
+
+local function GetHeavySackSettings()
+    EZOAlerts.sv.producers = EZOAlerts.sv.producers or {}
+    EZOAlerts.sv.producers.heavySacks = EZOAlerts.sv.producers.heavySacks or {}
+
+    local settings = EZOAlerts.sv.producers.heavySacks
+    if settings.enabled == nil then settings.enabled = true end
+    if settings.groupChat == nil then settings.groupChat = true end
+    if settings.minIntervalMs == nil then settings.minIntervalMs = 15000 end
+    return settings
+end
+
+local function GetGroupLeaderZoneSettings()
+    EZOAlerts.sv.producers = EZOAlerts.sv.producers or {}
+    EZOAlerts.sv.producers.groupLeaderZone = EZOAlerts.sv.producers.groupLeaderZone or {}
+
+    local settings = EZOAlerts.sv.producers.groupLeaderZone
+    if settings.enabled == nil then settings.enabled = true end
+    if settings.ignoreIfPlayerInSameZone == nil then settings.ignoreIfPlayerInSameZone = true end
+    if settings.minIntervalMs == nil then settings.minIntervalMs = 10000 end
+    return settings
 end
 
 local function GetOptions()
@@ -40,6 +83,15 @@ local function GetOptions()
             default = "auto",
             width   = "half",
             tooltip = GetString(EZOA_OPTION_LANGUAGE_TOOLTIP),
+        },
+        {
+            type    = "checkbox",
+            name    = GetString(EZOA_OPTION_LOG_ENABLED),
+            tooltip = GetString(EZOA_OPTION_LOG_ENABLED_TOOLTIP),
+            getFunc = function() return EZOA.sv.general.log == true end,
+            setFunc = function(value) EZOA.sv.general.log = value == true end,
+            default = false,
+            width   = "full",
         },
 
         { type = "header", name = GetString(EZOA_OPTION_ALERTS) },
@@ -123,6 +175,134 @@ local function GetOptions()
                 end
             end,
             width   = "full",
+        },
+
+        { type = "header", name = GetString(EZOA_OPTION_GENERATED_ALERTS) },
+        {
+            type    = "checkbox",
+            name    = GetString(EZOA_OPTION_CHESTS_ENABLED),
+            tooltip = GetString(EZOA_OPTION_CHESTS_ENABLED_TOOLTIP),
+            getFunc = function() return GetChestSettings().enabled ~= false end,
+            setFunc = function(value) GetChestSettings().enabled = value == true end,
+            default = true,
+            width   = "full",
+        },
+        {
+            type    = "checkbox",
+            name    = GetString(EZOA_OPTION_CHESTS_GROUP_CHAT),
+            tooltip = GetString(EZOA_OPTION_CHESTS_GROUP_CHAT_TOOLTIP),
+            getFunc = function() return GetChestSettings().groupChat == true end,
+            setFunc = function(value) GetChestSettings().groupChat = value == true end,
+            default = true,
+            width   = "full",
+        },
+        {
+            type     = "slider",
+            name     = GetString(EZOA_OPTION_CHESTS_INTERVAL),
+            tooltip  = GetString(EZOA_OPTION_CHESTS_INTERVAL_TOOLTIP),
+            min      = 5000,
+            max      = 60000,
+            step     = 5000,
+            getFunc  = function() return tonumber(GetChestSettings().minIntervalMs) or 15000 end,
+            setFunc  = function(value) GetChestSettings().minIntervalMs = tonumber(value) or 15000 end,
+            default  = 15000,
+            width    = "half",
+        },
+        {
+            type    = "checkbox",
+            name    = GetString(EZOA_OPTION_HEAVY_SACKS_ENABLED),
+            tooltip = GetString(EZOA_OPTION_HEAVY_SACKS_ENABLED_TOOLTIP),
+            getFunc = function() return GetHeavySackSettings().enabled ~= false end,
+            setFunc = function(value) GetHeavySackSettings().enabled = value == true end,
+            default = true,
+            width   = "full",
+        },
+        {
+            type    = "checkbox",
+            name    = GetString(EZOA_OPTION_HEAVY_SACKS_GROUP_CHAT),
+            tooltip = GetString(EZOA_OPTION_HEAVY_SACKS_GROUP_CHAT_TOOLTIP),
+            getFunc = function() return GetHeavySackSettings().groupChat == true end,
+            setFunc = function(value) GetHeavySackSettings().groupChat = value == true end,
+            default = true,
+            width   = "full",
+        },
+        {
+            type     = "slider",
+            name     = GetString(EZOA_OPTION_HEAVY_SACKS_INTERVAL),
+            tooltip  = GetString(EZOA_OPTION_HEAVY_SACKS_INTERVAL_TOOLTIP),
+            min      = 5000,
+            max      = 60000,
+            step     = 5000,
+            getFunc  = function() return tonumber(GetHeavySackSettings().minIntervalMs) or 15000 end,
+            setFunc  = function(value) GetHeavySackSettings().minIntervalMs = tonumber(value) or 15000 end,
+            default  = 15000,
+            width    = "half",
+        },
+        {
+            type    = "checkbox",
+            name    = GetString(EZOA_OPTION_GROUP_GUILDS_ENABLED),
+            tooltip = GetString(EZOA_OPTION_GROUP_GUILDS_ENABLED_TOOLTIP),
+            getFunc = function() return GetGroupGuildSettings().enabled ~= false end,
+            setFunc = function(value)
+                GetGroupGuildSettings().enabled = value == true
+                if value == true and EZOAlerts_ProducerGroupGuilds and EZOAlerts_ProducerGroupGuilds.QueueScan then
+                    EZOAlerts_ProducerGroupGuilds.QueueScan()
+                end
+            end,
+            default = true,
+            width   = "full",
+        },
+        {
+            type    = "checkbox",
+            name    = GetString(EZOA_OPTION_GROUP_GUILDS_SUPPRESS_LEADER),
+            tooltip = GetString(EZOA_OPTION_GROUP_GUILDS_SUPPRESS_LEADER_TOOLTIP),
+            getFunc = function() return GetGroupGuildSettings().suppressWhenLeaderSharesGuild == true end,
+            setFunc = function(value)
+                GetGroupGuildSettings().suppressWhenLeaderSharesGuild = value == true
+                if EZOAlerts_ProducerGroupGuilds and EZOAlerts_ProducerGroupGuilds.ResetSession then
+                    EZOAlerts_ProducerGroupGuilds.ResetSession()
+                end
+            end,
+            default = true,
+            width   = "full",
+        },
+        {
+            type    = "checkbox",
+            name    = GetString(EZOA_OPTION_GROUP_LEADER_ZONE_ENABLED),
+            tooltip = GetString(EZOA_OPTION_GROUP_LEADER_ZONE_ENABLED_TOOLTIP),
+            getFunc = function() return GetGroupLeaderZoneSettings().enabled ~= false end,
+            setFunc = function(value)
+                GetGroupLeaderZoneSettings().enabled = value == true
+                if EZOAlerts_ProducerGroupLeaderZone and EZOAlerts_ProducerGroupLeaderZone.Reset then
+                    EZOAlerts_ProducerGroupLeaderZone.Reset()
+                end
+                if value == true and EZOAlerts_ProducerGroupLeaderZone and EZOAlerts_ProducerGroupLeaderZone.QueueScan then
+                    EZOAlerts_ProducerGroupLeaderZone.QueueScan()
+                end
+            end,
+            default = true,
+            width   = "full",
+        },
+        {
+            type    = "checkbox",
+            name    = GetString(EZOA_OPTION_GROUP_LEADER_ZONE_IGNORE_SAME),
+            tooltip = GetString(EZOA_OPTION_GROUP_LEADER_ZONE_IGNORE_SAME_TOOLTIP),
+            getFunc = function() return GetGroupLeaderZoneSettings().ignoreIfPlayerInSameZone == true end,
+            setFunc = function(value) GetGroupLeaderZoneSettings().ignoreIfPlayerInSameZone = value == true end,
+            default = true,
+            width   = "full",
+        },
+        {
+            type     = "slider",
+            name     = GetString(EZOA_OPTION_GROUP_LEADER_ZONE_INTERVAL),
+            tooltip  = GetString(EZOA_OPTION_GROUP_LEADER_ZONE_INTERVAL_TOOLTIP),
+            min      = 5000,
+            max      = 60000,
+            step     = 5000,
+            getFunc  = function() return tonumber(GetGroupLeaderZoneSettings().minIntervalMs) or 10000 end,
+            setFunc  = function(value) GetGroupLeaderZoneSettings().minIntervalMs = tonumber(value) or 10000 end,
+            default  = 10000,
+            width    = "half",
         },
     }
 end

@@ -1,4 +1,4 @@
--- Saved variables for EZOAlerts.
+-- Valores guardados y defaults de EZOAlerts.
 EZOAlerts_SavedVars = EZOAlerts_SavedVars or {}
 local MOD = EZOAlerts_SavedVars
 
@@ -8,6 +8,7 @@ function MOD.GetDefaults()
     return {
         general = {
             language = LANGUAGE_AUTO,
+            log = false,
         },
         alerts = {
             enabled = true,
@@ -20,6 +21,27 @@ function MOD.GetDefaults()
         channels = {
             screen = true,
             groupChat = false,
+        },
+        producers = {
+            chests = {
+                enabled = true,
+                groupChat = true,
+                minIntervalMs = 15000,
+            },
+            heavySacks = {
+                enabled = true,
+                groupChat = true,
+                minIntervalMs = 15000,
+            },
+            groupGuilds = {
+                enabled = true,
+                suppressWhenLeaderSharesGuild = true,
+            },
+            groupLeaderZone = {
+                enabled = true,
+                ignoreIfPlayerInSameZone = true,
+                minIntervalMs = 10000,
+            },
         },
     }
 end

@@ -14,6 +14,10 @@ El objetivo es desarrollar el sistema de avisos como pieza modular y pequena, co
 - Runtime organizado por responsabilidades.
 - API pequena para productores de avisos.
 - Canales separados: pantalla y chat de grupo.
+- Productores internos para avisos generados por el propio addon.
+- Avisos locales privados para miembros de grupo que comparten guild contigo.
+- Avisos de cofres y sacos pesados con canales configurables.
+- Aviso local cuando el lider del grupo cambia de instancia o zona.
 
 ## API prevista
 
@@ -48,6 +52,11 @@ EZOAlerts.TriggerAlert("example", { message = "Ready" })
 - `modules/channels.lua`: dispatcher de canales.
 - `modules/renderer.lua`: renderer visual en pantalla.
 - `modules/group_chat.lua`: salida controlada al chat de grupo.
+- `modules/producers.lua`: inicializacion de productores internos.
+- `modules/producers/chests.lua`: aviso interno al abrir cofres.
+- `modules/producers/heavy_sacks.lua`: aviso interno al abrir sacos pesados.
+- `modules/producers/group_guilds.lua`: deteccion local de guilds compartidas en grupo.
+- `modules/producers/group_leader_zone.lua`: aviso local cuando el lider cambia de zona.
 - `modules/menu.lua`: panel LAM.
 - `docs/architecture.md`: decisiones tecnicas.
 - `docs/integration-with-ezotools.md`: plan de integracion futura.

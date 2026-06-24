@@ -1,4 +1,4 @@
--- Main entry point for EZOAlerts.
+-- Entrada principal de EZOAlerts.
 EZOAlerts = EZOAlerts or {}
 local EZOA = EZOAlerts
 
@@ -59,6 +59,10 @@ function EZOA:Initialize()
         EZOAlerts_Registry.Init()
     end
 
+    if EZOAlerts_Log and EZOAlerts_Log.Init then
+        EZOAlerts_Log.Init()
+    end
+
     if EZOAlerts_Renderer and EZOAlerts_Renderer.Init then
         EZOAlerts_Renderer.Init()
     end
@@ -69,6 +73,10 @@ function EZOA:Initialize()
 
     if EZOAlerts_Channels and EZOAlerts_Channels.Init then
         EZOAlerts_Channels.Init()
+    end
+
+    if EZOAlerts_Producers and EZOAlerts_Producers.Init then
+        EZOAlerts_Producers.Init()
     end
 
     if EZOAlerts_Menu and EZOAlerts_Menu.Init then

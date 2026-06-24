@@ -1,4 +1,4 @@
--- Alert registry. Producers register small alert definitions here.
+-- Registro pequeno donde los productores dejan sus avisos.
 EZOAlerts_Registry = EZOAlerts_Registry or {}
 local REG = EZOAlerts_Registry
 
@@ -34,7 +34,7 @@ local function BuildPayload(definition, context)
         screenText = ResolveValue(definition.screenText, context),
         groupText = ResolveValue(definition.groupText, context),
         kind = definition.kind or (EZOAlerts and EZOAlerts.ALERT_KIND_INFO) or "info",
-        options = definition.options,
+        options = ResolveValue(definition.options, context),
     }
 
     payload.screenText = payload.screenText or payload.text
@@ -50,7 +50,7 @@ function REG.Trigger(id, context)
 
     local payload = BuildPayload(definition, context)
     if EZOAlerts_Channels and EZOAlerts_Channels.Dispatch then
-        return EZOAlerts_Channels.Dispatch(payload, definition.channels)
+        return EZOAlerts_Channels.Dispatch(payload, ResolveValue(definition.channels, context))
     end
     return false
 end

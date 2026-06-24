@@ -1,4 +1,4 @@
--- Channel dispatcher for screen and group chat alerts.
+-- Reparte cada aviso entre pantalla y chat de grupo.
 EZOAlerts_Channels = EZOAlerts_Channels or {}
 local MOD = EZOAlerts_Channels
 

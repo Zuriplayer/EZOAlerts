@@ -1,4 +1,4 @@
--- Group chat output channel for EZOAlerts.
+-- Salida controlada hacia el chat de grupo.
 EZOAlerts_GroupChat = EZOAlerts_GroupChat or {}
 local MOD = EZOAlerts_GroupChat
 
@@ -22,7 +22,7 @@ function MOD.Send(text, options)
     end
 
     if options and options.requireGroup == false then
-        -- Allow explicit future system/local tests to bypass the group guard.
+        -- Deja una puerta clara para pruebas locales o casos muy concretos.
     elseif not CanSendToGroup() then
         return false
     end
