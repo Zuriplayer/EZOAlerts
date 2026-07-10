@@ -42,6 +42,7 @@ try {
         "modules/producers/heavy_sacks.lua",
         "modules/producers/group_guilds.lua",
         "modules/producers/group_leader_zone.lua",
+        "modules/producers/role_check.lua",
         "modules/menu.lua"
     )
 

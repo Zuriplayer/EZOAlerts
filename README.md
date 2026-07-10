@@ -1,62 +1,76 @@
 # EZOAlerts
 
-Addon independiente de la familia EZO para avisos en pantalla y mensajes controlados al chat de grupo.
+**Public beta.** EZOAlerts is a standalone Elder Scrolls Online addon for modular on-screen alerts and controlled group-chat notifications in the EZO addon family.
 
-El objetivo es desarrollar el sistema de avisos como pieza modular y pequena, con una superficie facil de integrar en `EZOTools` si en el futuro conviene consolidarlo.
+The addon is intentionally small and conservative. It can generate alerts on its own, while keeping a simple public API for future integration with other EZO addons.
 
-## Filosofia
+## Requirements
 
-- Interfaz unica en LibAddonMenu.
-- Sin keybindings.
-- Sin menues laterales.
-- Sin interceptar input.
-- Dos idiomas: ingles y espanol, con modo automatico.
-- Runtime organizado por responsabilidades.
-- API pequena para productores de avisos.
-- Canales separados: pantalla y chat de grupo.
-- Productores internos para avisos generados por el propio addon.
-- Avisos locales privados para miembros de grupo que comparten guild contigo.
-- Avisos de cofres y sacos pesados con canales configurables.
-- Aviso local cuando el lider del grupo cambia de instancia o zona.
+- The Elder Scrolls Online.
+- LibAddonMenu-2.0.
+- Optional: LibChatMessage.
 
-## API prevista
+Current manifest API versions:
 
-```lua
-EZOAlerts.ShowAlert("Texto", EZOAlerts.ALERT_KIND_INFO)
-EZOAlerts.SendGroupAlert("Texto para el grupo")
+- `101049`
+- `101050`
 
-EZOAlerts.RegisterAlert("example", {
-    kind = EZOAlerts.ALERT_KIND_WARNING,
-    channels = {
-        screen = true,
-        groupChat = true,
-    },
-    text = function(context)
-        return context and context.message or "Alert"
-    end,
-    groupText = function(context)
-        return context and context.groupMessage or "Group alert"
-    end,
-})
+## Installation
 
-EZOAlerts.TriggerAlert("example", { message = "Ready" })
+1. Download or clone this repository.
+2. Copy the `EZOAlerts` folder to your ESO addons folder:
+   - `Documents/Elder Scrolls Online/live/AddOns/EZOAlerts`
+   - or `Documents/Elder Scrolls Online/pts/AddOns/EZOAlerts`
+3. Make sure `LibAddonMenu-2.0` is installed and enabled.
+4. Start ESO or run `/reloadui`.
+5. Configure the addon from `Settings > Addons > EZOAlerts`.
+
+## Main Features
+
+- On-screen alerts with a shared movable alert window.
+- Controlled group-chat messages for configured group events.
+- Chest and heavy-sack alerts while grouped.
+- Local-only alerts when a group member shares one or more guilds with you.
+- Optional leader-zone alert when the group leader changes zone or instance.
+- Local role check based on selected role, equipped weapons and basic slotted-skill signals.
+- English and Spanish localization, with automatic language mode.
+- Central optional log with one grouped dump after combat.
+
+## Safety Boundaries
+
+- No combat automation.
+- No automatic travel.
+- No global input interception.
+- No custom keybindings.
+- No set scanning in the role check.
+- Group-chat alerts only run when the relevant options are enabled and the player is grouped.
+- ESO chat restrictions may require a prepared group-chat line to be confirmed manually.
+
+## Beta Notes
+
+This is a beta build. Please test with `/reloadui`, grouped and solo play, keyboard/mouse and gamepad mode, and both English and Spanish settings.
+
+Useful checks during testing:
+
+- The addon loads without Lua errors.
+- The LibAddonMenu panel opens correctly.
+- The test screen alert appears only in normal HUD/HUD UI scenes.
+- The movable alert preview does not remain active after `/reloadui`.
+- Chest and heavy-sack alerts do not trigger outside a group.
+- Role-check alerts can be acknowledged or muted for the current session.
+
+## Development
+
+Quick validation commands:
+
+```powershell
+.\tools\bump-version.ps1 -Check
+git diff --check
+.\tools\build-addon-package.ps1 -Force
 ```
 
-## Estructura
+The package script writes release ZIP files to `dist/`, which is ignored by Git.
 
-- `EZOAlerts.lua`: inicializacion.
-- `modules/core.lua`: constantes publicas.
-- `modules/saved_vars.lua`: defaults y SavedVariables.
-- `modules/i18n.lua`: aplicacion de idiomas.
-- `modules/alert_registry.lua`: registro y API de avisos.
-- `modules/channels.lua`: dispatcher de canales.
-- `modules/renderer.lua`: renderer visual en pantalla.
-- `modules/group_chat.lua`: salida controlada al chat de grupo.
-- `modules/producers.lua`: inicializacion de productores internos.
-- `modules/producers/chests.lua`: aviso interno al abrir cofres.
-- `modules/producers/heavy_sacks.lua`: aviso interno al abrir sacos pesados.
-- `modules/producers/group_guilds.lua`: deteccion local de guilds compartidas en grupo.
-- `modules/producers/group_leader_zone.lua`: aviso local cuando el lider cambia de zona.
-- `modules/menu.lua`: panel LAM.
-- `docs/architecture.md`: decisiones tecnicas.
-- `docs/integration-with-ezotools.md`: plan de integracion futura.
+## License
+
+MIT. See `LICENSE`.

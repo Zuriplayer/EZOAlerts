@@ -19,7 +19,9 @@ Los avisos de cofres y sacos pesados usan productores separados para que cada un
 
 El aviso de zona del lider usa mensajes locales y no viaja automaticamente. La accion de viajar queda fuera de EZOAlerts para poder resolverla en EZOTools.
 
-Los controles visuales propios deben registrarse como fragmentos de `HUD_SCENE` y `HUD_UI_SCENE`, y ademas mantener un guard interno para no mostrarse fuera de `hud` o `hudui`.
+La comprobacion de rol es local y no usa sets. Prioriza senales nativas simples: rol seleccionado, tipos de arma equipados y `abilityId` sloteados cuando la API los devuelve. Las alarmas cubren contradicciones claras; los warnings quedan como capa opcional para detalles menos definitivos. Puede silenciarse sin perder la configuracion cuando el rol distinto es intencionado. Sus avisos son persistentes hasta accion del jugador y permiten confirmar el caso o silenciar la sesion.
+
+Los controles visuales propios deben registrarse como fragmentos de `HUD_SCENE` y `HUD_UI_SCENE`, y ademas mantener un guard interno para no mostrarse fuera de `hud` o `hudui`. `renderer.lua` es la ventana comun para avisos de pantalla. Su modo mover es temporal de sesion: solo guarda la posicion, se oculta fuera de HUD/HUD_UI y se apaga al entrar en combate. El combate no bloquea todos los avisos de pantalla: cada productor decide si su aviso debe usar `hideInCombat`.
 
 El log es unico para todo el addon. Los productores registran entradas en `EZOAlerts_Log` y el modulo hace un unico volcado al terminar combate, o un volcado agrupado breve si no estamos en combate.
 

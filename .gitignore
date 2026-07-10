@@ -1,9 +1,44 @@
 SavedVariables/
 dist/
-*.log
-*.tmp
-*.bak
+
+# Local assistant and IDE state
+AGENTS.md
+.codex/
+.agents/
+.cursor/
+.continue/
+.aider*
+.claude/
+.github-copilot/
 .vscode/
 .idea/
+
+# Local environment and private data
+.env
+.env.*
+*.env
+*.secret*
+secrets.*
+*.local*
+local/
+private/
+scratch/
+tmp/
+temp/
+
+# Local planning notes
+docs/review-and-backlog.md
+
+# Logs, backups and temporary files
+*.log
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
+*.orig
+*~
+~$*
 Thumbs.db
 .DS_Store
+desktop.ini

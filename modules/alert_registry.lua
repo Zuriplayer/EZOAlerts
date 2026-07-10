@@ -33,7 +33,7 @@ local function BuildPayload(definition, context)
         text = ResolveValue(definition.text, context),
         screenText = ResolveValue(definition.screenText, context),
         groupText = ResolveValue(definition.groupText, context),
-        kind = definition.kind or (EZOAlerts and EZOAlerts.ALERT_KIND_INFO) or "info",
+        kind = ResolveValue(definition.kind, context) or (EZOAlerts and EZOAlerts.ALERT_KIND_INFO) or "info",
         options = ResolveValue(definition.options, context),
     }
 

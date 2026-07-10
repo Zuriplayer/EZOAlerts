@@ -5,6 +5,16 @@ local MENU = EZOAlerts_Menu
 local ADDON_NAME = "EZOAlerts"
 local DISPLAY_NAME = "E|cB040FFZ|rOAlerts"
 
+local function MsToSeconds(value, fallbackMs)
+    local ms = tonumber(value) or fallbackMs or 0
+    return ms / 1000
+end
+
+local function SecondsToMs(value, fallbackSeconds)
+    local seconds = tonumber(value) or fallbackSeconds or 0
+    return zo_round(seconds * 1000)
+end
+
 local function RefreshRenderer()
     if EZOAlerts_Renderer and EZOAlerts_Renderer.Refresh then
         EZOAlerts_Renderer.Refresh()
@@ -57,6 +67,18 @@ local function GetGroupLeaderZoneSettings()
     if settings.enabled == nil then settings.enabled = true end
     if settings.ignoreIfPlayerInSameZone == nil then settings.ignoreIfPlayerInSameZone = true end
     if settings.minIntervalMs == nil then settings.minIntervalMs = 10000 end
+    return settings
+end
+
+local function GetRoleCheckSettings()
+    EZOAlerts.sv.producers = EZOAlerts.sv.producers or {}
+    EZOAlerts.sv.producers.roleCheck = EZOAlerts.sv.producers.roleCheck or {}
+
+    local settings = EZOAlerts.sv.producers.roleCheck
+    if settings.mode == nil then settings.mode = "alarms" end
+    if settings.muted == nil then settings.muted = false end
+    if settings.onlyGrouped == nil then settings.onlyGrouped = true end
+    if settings.minIntervalMs == nil then settings.minIntervalMs = 60000 end
     return settings
 end
 
@@ -119,12 +141,13 @@ local function GetOptions()
             type     = "slider",
             name     = GetString(EZOA_OPTION_DURATION),
             tooltip  = GetString(EZOA_OPTION_DURATION_TOOLTIP),
-            min      = 500,
-            max      = 10000,
-            step     = 250,
-            getFunc  = function() return tonumber(EZOA.sv.alerts.durationMs) or 2500 end,
-            setFunc  = function(value) EZOA.sv.alerts.durationMs = tonumber(value) or 2500 end,
-            default  = 2500,
+            min      = 0.5,
+            max      = 10,
+            step     = 0.5,
+            decimals = 1,
+            getFunc  = function() return MsToSeconds(EZOA.sv.alerts.durationMs, 2500) end,
+            setFunc  = function(value) EZOA.sv.alerts.durationMs = SecondsToMs(value, 2.5) end,
+            default  = 2.5,
             width    = "half",
         },
         {
@@ -154,6 +177,24 @@ local function GetOptions()
             end,
             default = "CENTER",
             width   = "half",
+        },
+        {
+            type    = "checkbox",
+            name    = GetString(EZOA_OPTION_MOVE_WINDOW),
+            tooltip = GetString(EZOA_OPTION_MOVE_WINDOW_TOOLTIP),
+            getFunc = function()
+                return EZOAlerts_Renderer and EZOAlerts_Renderer.IsMoveMode and EZOAlerts_Renderer.IsMoveMode() or false
+            end,
+            setFunc = function(value)
+                if EZOAlerts_Renderer and EZOAlerts_Renderer.SetMoveMode then
+                    EZOAlerts_Renderer.SetMoveMode(value == true)
+                end
+                if value == true and EZOAlerts and EZOAlerts.Print then
+                    EZOAlerts.Print(GetString(EZOA_MSG_MOVE_WINDOW_HINT))
+                end
+            end,
+            default = false,
+            width   = "full",
         },
         {
             type    = "button",
@@ -200,12 +241,12 @@ local function GetOptions()
             type     = "slider",
             name     = GetString(EZOA_OPTION_CHESTS_INTERVAL),
             tooltip  = GetString(EZOA_OPTION_CHESTS_INTERVAL_TOOLTIP),
-            min      = 5000,
-            max      = 60000,
-            step     = 5000,
-            getFunc  = function() return tonumber(GetChestSettings().minIntervalMs) or 15000 end,
-            setFunc  = function(value) GetChestSettings().minIntervalMs = tonumber(value) or 15000 end,
-            default  = 15000,
+            min      = 5,
+            max      = 60,
+            step     = 5,
+            getFunc  = function() return MsToSeconds(GetChestSettings().minIntervalMs, 15000) end,
+            setFunc  = function(value) GetChestSettings().minIntervalMs = SecondsToMs(value, 15) end,
+            default  = 15,
             width    = "half",
         },
         {
@@ -230,12 +271,12 @@ local function GetOptions()
             type     = "slider",
             name     = GetString(EZOA_OPTION_HEAVY_SACKS_INTERVAL),
             tooltip  = GetString(EZOA_OPTION_HEAVY_SACKS_INTERVAL_TOOLTIP),
-            min      = 5000,
-            max      = 60000,
-            step     = 5000,
-            getFunc  = function() return tonumber(GetHeavySackSettings().minIntervalMs) or 15000 end,
-            setFunc  = function(value) GetHeavySackSettings().minIntervalMs = tonumber(value) or 15000 end,
-            default  = 15000,
+            min      = 5,
+            max      = 60,
+            step     = 5,
+            getFunc  = function() return MsToSeconds(GetHeavySackSettings().minIntervalMs, 15000) end,
+            setFunc  = function(value) GetHeavySackSettings().minIntervalMs = SecondsToMs(value, 15) end,
+            default  = 15,
             width    = "half",
         },
         {
@@ -296,12 +337,74 @@ local function GetOptions()
             type     = "slider",
             name     = GetString(EZOA_OPTION_GROUP_LEADER_ZONE_INTERVAL),
             tooltip  = GetString(EZOA_OPTION_GROUP_LEADER_ZONE_INTERVAL_TOOLTIP),
-            min      = 5000,
-            max      = 60000,
-            step     = 5000,
-            getFunc  = function() return tonumber(GetGroupLeaderZoneSettings().minIntervalMs) or 10000 end,
-            setFunc  = function(value) GetGroupLeaderZoneSettings().minIntervalMs = tonumber(value) or 10000 end,
-            default  = 10000,
+            min      = 5,
+            max      = 60,
+            step     = 5,
+            getFunc  = function() return MsToSeconds(GetGroupLeaderZoneSettings().minIntervalMs, 10000) end,
+            setFunc  = function(value) GetGroupLeaderZoneSettings().minIntervalMs = SecondsToMs(value, 10) end,
+            default  = 10,
+            width    = "half",
+        },
+        {
+            type          = "dropdown",
+            name          = GetString(EZOA_OPTION_ROLE_CHECK_MODE),
+            tooltip       = GetString(EZOA_OPTION_ROLE_CHECK_MODE_TOOLTIP),
+            choices       = { GetString(EZOA_OPTION_ROLE_CHECK_DISABLED), GetString(EZOA_OPTION_ROLE_CHECK_ALARMS), GetString(EZOA_OPTION_ROLE_CHECK_ALL) },
+            choicesValues = { "disabled", "alarms", "all" },
+            getFunc       = function() return GetRoleCheckSettings().mode or "alarms" end,
+            setFunc       = function(value)
+                GetRoleCheckSettings().mode = tostring(value or "alarms")
+                if EZOAlerts_ProducerRoleCheck and EZOAlerts_ProducerRoleCheck.Reset then
+                    EZOAlerts_ProducerRoleCheck.Reset()
+                end
+                if EZOAlerts_ProducerRoleCheck and EZOAlerts_ProducerRoleCheck.QueueScan then
+                    EZOAlerts_ProducerRoleCheck.QueueScan()
+                end
+            end,
+            default = "alarms",
+            width   = "full",
+        },
+        {
+            type    = "checkbox",
+            name    = GetString(EZOA_OPTION_ROLE_CHECK_MUTED),
+            tooltip = GetString(EZOA_OPTION_ROLE_CHECK_MUTED_TOOLTIP),
+            getFunc = function() return GetRoleCheckSettings().muted == true end,
+            setFunc = function(value)
+                GetRoleCheckSettings().muted = value == true
+                if EZOAlerts_ProducerRoleCheck and EZOAlerts_ProducerRoleCheck.Reset then
+                    EZOAlerts_ProducerRoleCheck.Reset()
+                end
+                if value ~= true and EZOAlerts_ProducerRoleCheck and EZOAlerts_ProducerRoleCheck.QueueScan then
+                    EZOAlerts_ProducerRoleCheck.QueueScan()
+                end
+            end,
+            default = false,
+            width   = "full",
+        },
+        {
+            type    = "checkbox",
+            name    = GetString(EZOA_OPTION_ROLE_CHECK_ONLY_GROUPED),
+            tooltip = GetString(EZOA_OPTION_ROLE_CHECK_ONLY_GROUPED_TOOLTIP),
+            getFunc = function() return GetRoleCheckSettings().onlyGrouped == true end,
+            setFunc = function(value)
+                GetRoleCheckSettings().onlyGrouped = value == true
+                if EZOAlerts_ProducerRoleCheck and EZOAlerts_ProducerRoleCheck.QueueScan then
+                    EZOAlerts_ProducerRoleCheck.QueueScan()
+                end
+            end,
+            default = true,
+            width   = "full",
+        },
+        {
+            type     = "slider",
+            name     = GetString(EZOA_OPTION_ROLE_CHECK_INTERVAL),
+            tooltip  = GetString(EZOA_OPTION_ROLE_CHECK_INTERVAL_TOOLTIP),
+            min      = 15,
+            max      = 300,
+            step     = 15,
+            getFunc  = function() return MsToSeconds(GetRoleCheckSettings().minIntervalMs, 60000) end,
+            setFunc  = function(value) GetRoleCheckSettings().minIntervalMs = SecondsToMs(value, 60) end,
+            default  = 60,
             width    = "half",
         },
     }

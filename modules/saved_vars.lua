@@ -42,6 +42,12 @@ function MOD.GetDefaults()
                 ignoreIfPlayerInSameZone = true,
                 minIntervalMs = 10000,
             },
+            roleCheck = {
+                mode = "alarms",
+                muted = false,
+                onlyGrouped = true,
+                minIntervalMs = 60000,
+            },
         },
     }
 end

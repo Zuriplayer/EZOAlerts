@@ -18,4 +18,8 @@ function MOD.Init()
     if EZOAlerts_ProducerGroupLeaderZone and EZOAlerts_ProducerGroupLeaderZone.Init then
         EZOAlerts_ProducerGroupLeaderZone.Init()
     end
+
+    if EZOAlerts_ProducerRoleCheck and EZOAlerts_ProducerRoleCheck.Init then
+        EZOAlerts_ProducerRoleCheck.Init()
+    end
 end
