@@ -2,9 +2,10 @@
 
 **Public beta.** EZOAlerts is a standalone Elder Scrolls Online addon for modular on-screen alerts and controlled group-chat notifications in the EZO addon family.
 
-Prefer Spanish? Read the [Spanish README](README.es.md).
+¿Prefieres español? Lee el [README en español](README.es.md).
 
 Support, bug reports and suggestions: https://discord.gg/5w3y7y5xH
+
 
 ## Current Scope
 
