@@ -12,16 +12,18 @@ EZOAlerts proporciona un sistema pequeño de avisos con productores internos, un
 
 El addon se centra actualmente en avisos de grupo y coherencia de rol. No sustituye la interfaz de combate, los marcos de grupo, las barras de habilidades ni otros sistemas de ESO.
 
+## Metadatos de versión
+
+- Versión del addon: `0.1.18`
+- AddOnVersion: `10018`
+- APIVersion: `101049 101050`
+- Estado: beta pública
+
 ## Requisitos
 
 - The Elder Scrolls Online.
 - LibAddonMenu-2.0.
 - Opcional: LibChatMessage, usado solo para mensajes locales del addon más limpios cuando está disponible.
-
-Versiones de API actuales del manifiesto:
-
-- `101049`
-- `101050`
 
 ## Instalación
 

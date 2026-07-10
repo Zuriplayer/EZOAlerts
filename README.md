@@ -12,16 +12,18 @@ EZOAlerts provides a small alert system with internal producers, a shared HUD al
 
 The addon currently focuses on group and role-awareness alerts. It does not replace combat UI, group frames, action bars or ESO systems.
 
+## Version Metadata
+
+- Addon version: `0.1.18`
+- AddOnVersion: `10018`
+- APIVersion: `101049 101050`
+- Status: public beta
+
 ## Requirements
 
 - The Elder Scrolls Online.
 - LibAddonMenu-2.0.
 - Optional: LibChatMessage, used only for cleaner local addon messages when available.
-
-Current manifest API versions:
-
-- `101049`
-- `101050`
 
 ## Installation
 
