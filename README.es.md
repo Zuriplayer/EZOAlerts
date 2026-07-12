@@ -4,7 +4,7 @@
 
 Prefer English? Read the [README in English](README.md).
 
-Soporte, errores y sugerencias: https://discord.gg/5w3y7y5xH
+Soporte, errores y sugerencias: https://discord.gg/ekw8zUAcRm
 
 
 ## Alcance Actual

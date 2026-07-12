@@ -4,7 +4,7 @@
 
 ¿Prefieres español? Lee el [README en español](README.es.md).
 
-Support, bug reports and suggestions: https://discord.gg/5w3y7y5xH
+Support, bug reports and suggestions: https://discord.gg/ekw8zUAcRm
 
 
 ## Current Scope
