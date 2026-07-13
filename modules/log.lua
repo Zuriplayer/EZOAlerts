@@ -35,12 +35,17 @@ local function FormatText(stringId, fallback, values)
 end
 
 local function GetLogger()
+    if MOD.loggerUnavailable == true then
+        return nil
+    end
+
     if MOD.logger ~= nil then
         return MOD.logger
     end
 
     local lib = _G.LibDebugLogger
     if type(lib) ~= "function" and type(lib) ~= "table" then
+        MOD.loggerUnavailable = true
         return nil
     end
 
@@ -56,9 +61,11 @@ local function GetLogger()
 
     if ok and logger then
         MOD.logger = logger
+        MOD.loggerUnavailable = false
         return logger
     end
 
+    MOD.loggerUnavailable = true
     return nil
 end
 
@@ -93,6 +100,10 @@ function MOD.Record(category, message)
 
     message = tostring(message or "")
     if message == "" then
+        return false
+    end
+
+    if not GetLogger() then
         return false
     end
 
