@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.19 - Log noise fix
+
+- Restricted the optional central log to combat-time entries and post-combat DebugLogViewer output.
+- Removed the normal chat fallback for EZOAlerts log dumps.
+
 ## 0.1.18 - Public beta
 
 - Prepared EZOAlerts for public beta publication.
@@ -10,4 +15,3 @@
 - Added optional central logging with grouped output after combat.
 - Added controlled group-chat output for configured group events.
 - Added release metadata, package tooling and public documentation.
-

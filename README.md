@@ -87,14 +87,15 @@ The addon currently focuses on group and role-awareness alerts. It does not repl
 
 - Optional central log:
   - One global `Log` setting.
-  - Producers record events into a single log bus.
-  - Log output is grouped and dumped after combat when needed.
+  - Producers record combat-time events into a single log bus.
+  - Log output is grouped and dumped to LibDebugLogger/DebugLogViewer after combat when available.
+  - It does not print log summaries to the normal chat window.
 
 ## Main LibAddonMenu Options
 
 - General:
   - Language: automatic, English or Spanish.
-  - Log: enable one shared post-combat log.
+  - Log: enable one shared post-combat DebugLogViewer log.
 
 - Alerts:
   - Enable on-screen alerts.

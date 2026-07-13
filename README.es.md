@@ -87,14 +87,15 @@ El addon se centra actualmente en avisos de grupo y coherencia de rol. No sustit
 
 - Log central opcional:
   - Un único ajuste global `Log`.
-  - Los productores registran eventos en un bus de log común.
-  - La salida del log se agrupa y se vuelca al terminar el combate cuando corresponde.
+  - Los productores registran eventos ocurridos durante combate en un bus de log común.
+  - La salida del log se agrupa y se vuelca en LibDebugLogger/DebugLogViewer al terminar el combate si está disponible.
+  - No imprime resúmenes de log en la ventana normal de chat.
 
 ## Opciones Principales de LibAddonMenu
 
 - General:
   - Idioma: automático, inglés o español.
-  - Log: activa un único log compartido con volcado post-combate.
+  - Log: activa un único log compartido post-combate para DebugLogViewer.
 
 - Avisos:
   - Activar avisos en pantalla.

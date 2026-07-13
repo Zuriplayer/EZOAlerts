@@ -23,7 +23,7 @@ La comprobacion de rol es local y no usa sets. Prioriza senales nativas simples:
 
 Los controles visuales propios deben registrarse como fragmentos de `HUD_SCENE` y `HUD_UI_SCENE`, y ademas mantener un guard interno para no mostrarse fuera de `hud` o `hudui`. `renderer.lua` es la ventana comun para avisos de pantalla. Su modo mover es temporal de sesion: solo guarda la posicion, se oculta fuera de HUD/HUD_UI y se apaga al entrar en combate. El combate no bloquea todos los avisos de pantalla: cada productor decide si su aviso debe usar `hideInCombat`.
 
-El log es unico para todo el addon. Los productores registran entradas en `EZOAlerts_Log` y el modulo hace un unico volcado al terminar combate, o un volcado agrupado breve si no estamos en combate.
+El log es unico para todo el addon. Los productores registran entradas en `EZOAlerts_Log` solo mientras estamos en combate y el modulo hace un unico volcado a `LibDebugLogger`/`DebugLogViewer` al terminar combate. No usa el chat normal como fallback.
 
 ## Contratos
 

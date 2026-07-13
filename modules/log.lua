@@ -3,8 +3,6 @@ EZOAlerts_Log = EZOAlerts_Log or {}
 local MOD = EZOAlerts_Log
 
 local EVENT_NAMESPACE = "EZOAlerts_Log"
-local FLUSH_UPDATE = "EZOAlerts_LogFlush"
-local FLUSH_DELAY_MS = 1000
 local MAX_ENTRIES = 80
 local LOGGER_TAG = "EZOAlerts"
 
@@ -34,12 +32,6 @@ local function FormatText(stringId, fallback, values)
         return zo_strformat(text, unpack(values))
     end
     return ReplaceParams(text, values)
-end
-
-local function Print(message)
-    if EZOAlerts and type(EZOAlerts.Print) == "function" then
-        EZOAlerts.Print(message)
-    end
 end
 
 local function GetLogger()
@@ -90,20 +82,12 @@ local function WriteLogViewer(message)
     return ok == true and wrote == true
 end
 
-function MOD.QueueFlush()
-    if MOD.inCombat == true then
-        return
-    end
-
-    EVENT_MANAGER:UnregisterForUpdate(FLUSH_UPDATE)
-    EVENT_MANAGER:RegisterForUpdate(FLUSH_UPDATE, FLUSH_DELAY_MS, function()
-        EVENT_MANAGER:UnregisterForUpdate(FLUSH_UPDATE)
-        MOD.Flush()
-    end)
-end
-
 function MOD.Record(category, message)
     if not IsEnabled() then
+        return false
+    end
+
+    if MOD.inCombat ~= true then
         return false
     end
 
@@ -122,7 +106,6 @@ function MOD.Record(category, message)
         table.remove(MOD.entries, 1)
     end
 
-    MOD.QueueFlush()
     return true
 end
 
@@ -146,9 +129,7 @@ function MOD.Flush()
         })
     end
 
-    if not WriteLogViewer(table.concat(lines, "\n")) then
-        Print(GetText(_G.EZOA_LOG_HEADER, "EZOAlerts log"))
-    end
+    WriteLogViewer(table.concat(lines, "\n"))
 
     MOD.entries = {}
 end
@@ -162,9 +143,7 @@ function MOD.Init()
             local wasInCombat = MOD.inCombat == true
             MOD.inCombat = inCombat == true
 
-            if MOD.inCombat then
-                EVENT_MANAGER:UnregisterForUpdate(FLUSH_UPDATE)
-            elseif wasInCombat then
+            if not MOD.inCombat and wasInCombat then
                 MOD.Flush()
             end
         end)
