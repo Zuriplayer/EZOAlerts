@@ -9,7 +9,7 @@ Soporte, errores y sugerencias: https://discord.gg/ekw8zUAcRm
 
 ## Alcance Actual
 
-EZOAlerts proporciona un sistema pequeño de avisos con productores internos, una ventana HUD compartida y salida controlada al chat de grupo. Cuando EZOCore está activo, su configuración se integra en `Settings > EZO`; en caso contrario registra un panel independiente de LibAddonMenu.
+EZOAlerts proporciona un sistema pequeño de avisos con productores internos, una ventana HUD compartida y salida controlada al chat de grupo. Cuando EZOCore está activo, su configuración se integra en `Settings > EZO` y la previsualización participa en el modo compartido de disposición de interfaz; en caso contrario registra un panel independiente de LibAddonMenu con su propio control de movimiento.
 
 El addon se centra actualmente en avisos de grupo y coherencia de rol. No sustituye la interfaz de combate, los marcos de grupo, las barras de habilidades ni otros sistemas de ESO.
 

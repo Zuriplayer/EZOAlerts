@@ -10,6 +10,7 @@ EZOA.LANGUAGE_AUTO = LANGUAGE_AUTO
 
 local languageCallbackRegistered = false
 local ezocoreRegistered = false
+local layoutSurfaceRegistered = false
 
 local function Print(message)
     if LibChatMessage then
@@ -120,6 +121,7 @@ function EZOA.RegisterWithEZOCore()
             capabilities = {
                 "alerts.screen",
                 "alerts.groupChat",
+                "family.layout.consumer",
                 "family.language.consumer",
                 "family.settings.consumer",
             },
@@ -128,6 +130,41 @@ function EZOA.RegisterWithEZOCore()
 
     ezocoreRegistered = ok and result == true
     return ezocoreRegistered
+end
+
+function EZOA.RegisterLayoutWithEZOCore()
+    if layoutSurfaceRegistered
+        or not (EZOCore and type(EZOCore.GetService) == "function") then
+        return false
+    end
+
+    local service = EZOCore:GetService("family.layout", 1)
+    if not service or type(service.RegisterSurface) ~= "function" then
+        return false
+    end
+
+    local ok, result = pcall(function()
+        return service:RegisterSurface({
+            id = "ezoalerts.alert",
+            addonId = "ezoalerts",
+            addonName = "EZOAlerts",
+            name = function() return GetString(EZOA_OPTION_MOVE_WINDOW) end,
+            tooltip = function() return GetString(EZOA_OPTION_MOVE_WINDOW_TOOLTIP) end,
+            setEditMode = function(enabled)
+                EZOAlerts_Renderer.SetMoveMode(enabled)
+                return EZOAlerts_Renderer.IsMoveMode() == (enabled == true)
+            end,
+            isEditMode = function()
+                return EZOAlerts_Renderer.IsMoveMode()
+            end,
+            canEdit = function()
+                return type(IsUnitInCombat) ~= "function" or not IsUnitInCombat("player")
+            end,
+        })
+    end)
+
+    layoutSurfaceRegistered = ok and result == true
+    return layoutSurfaceRegistered
 end
 
 function EZOA:Initialize()
@@ -150,6 +187,7 @@ function EZOA:Initialize()
     if EZOAlerts_Renderer and EZOAlerts_Renderer.Init then
         EZOAlerts_Renderer.Init()
     end
+    EZOA.RegisterLayoutWithEZOCore()
 
     if EZOAlerts_GroupChat and EZOAlerts_GroupChat.Init then
         EZOAlerts_GroupChat.Init()

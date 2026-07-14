@@ -9,7 +9,7 @@ Support, bug reports and suggestions: https://discord.gg/ekw8zUAcRm
 
 ## Current Scope
 
-EZOAlerts provides a small alert system with internal producers, a shared HUD alert window and controlled group-chat output. When EZOCore is active, its configuration is embedded in `Settings > EZO`; otherwise it registers a standalone LibAddonMenu panel.
+EZOAlerts provides a small alert system with internal producers, a shared HUD alert window and controlled group-chat output. When EZOCore is active, its configuration is embedded in `Settings > EZO` and the alert preview participates in the shared interface layout mode; otherwise it registers a standalone LibAddonMenu panel with its own move control.
 
 The addon currently focuses on group and role-awareness alerts. It does not replace combat UI, group frames, action bars or ESO systems.
 

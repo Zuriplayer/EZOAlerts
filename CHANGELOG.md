@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.21 - Shared layout integration
+
+- Registers the alert preview with EZOCore `family.layout` for global or individual movement control.
+- Keeps the existing local move checkbox and combat safety when EZOCore is unavailable.
+
 ## 0.1.20 - Settings panel polish
 
 - Reformats the settings panel with EZO-style informational section headers and field-specific tooltips.
