@@ -107,19 +107,21 @@ local function GetOptions()
             type          = "dropdown",
             name          = GetString(EZOA_OPTION_LANGUAGE),
             choices       = {
-                GetString(EZOA_OPTION_LANGUAGE_INHERIT),
                 GetString(EZOA_OPTION_LANGUAGE_AUTO),
                 "English",
                 "Espanol",
             },
-            choicesValues = { "inherit", "auto", "en", "es" },
+            choicesValues = { "auto", "en", "es" },
             getFunc       = function()
-                return EZOA.sv.general.language
+                local value = EZOA.sv.general.language
                     or (EZOA.GetDefaultLanguage and EZOA.GetDefaultLanguage())
-                    or "inherit"
+                    or "auto"
+                if value == "inherit" then value = "auto" end
+                return value
             end,
             setFunc       = function(value)
-                value = tostring(value or (EZOA.GetDefaultLanguage and EZOA.GetDefaultLanguage()) or "inherit")
+                value = tostring(value or (EZOA.GetDefaultLanguage and EZOA.GetDefaultLanguage()) or "auto")
+                if value == "inherit" then value = "auto" end
                 EZOA.sv.general.language = value
                 if EZOA.ApplyLanguagePreference then
                     EZOA.ApplyLanguagePreference(value)
@@ -130,7 +132,10 @@ local function GetOptions()
                     WarnForcedLanguage()
                 end
             end,
-            default = (EZOA.GetDefaultLanguage and EZOA.GetDefaultLanguage()) or "inherit",
+            disabled = function()
+                return EZOA.IsLanguageManagedByEZOCore and EZOA.IsLanguageManagedByEZOCore()
+            end,
+            default = (EZOA.GetDefaultLanguage and EZOA.GetDefaultLanguage()) or "auto",
             width   = "half",
             tooltip = GetString(EZOA_OPTION_LANGUAGE_TOOLTIP),
         },
@@ -463,6 +468,7 @@ function MENU.Init()
         displayName         = DISPLAY_NAME,
         author              = "@Zuriplayer",
         version             = EZOAlerts.ADDON_VERSION,
+        ezoStage            = "beta",
         feedback            = FEEDBACK_URL,
         registerForRefresh  = true,
         registerForDefaults = true,

@@ -4,6 +4,7 @@
     "id": "ezoalerts",
     "name": "EZOAlerts",
     "version": "0.1.20",
+    "stage": "beta",
     "status": "beta",
     "phase": "public-beta",
     "visibility": "public",

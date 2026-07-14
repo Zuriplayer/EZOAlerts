@@ -5,7 +5,7 @@ local MOD = EZOAlerts_SavedVars
 function MOD.GetDefaults()
     return {
         general = {
-            language = EZOAlerts.GetDefaultLanguage and EZOAlerts.GetDefaultLanguage() or "inherit",
+            language = EZOAlerts.GetDefaultLanguage and EZOAlerts.GetDefaultLanguage() or "auto",
             log = false,
         },
         alerts = {

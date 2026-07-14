@@ -31,7 +31,7 @@ local function GetClientLanguage()
 end
 
 function EZOA.GetDefaultLanguage()
-    return LANGUAGE_INHERIT
+    return LANGUAGE_AUTO
 end
 
 function EZOA.GetClientLanguage()
@@ -40,16 +40,16 @@ end
 
 function EZOA.GetEffectiveLanguage(language)
     language = tostring(language or EZOA.GetDefaultLanguage())
-    if language == LANGUAGE_INHERIT then
-        if EZOCore and type(EZOCore.GetLanguage) == "function" then
-            local ok, inherited = pcall(function()
-                return EZOCore:GetLanguage()
-            end)
-            if ok and (inherited == "es" or inherited == "en") then
-                return inherited
-            end
+    if EZOA.IsLanguageManagedByEZOCore and EZOA.IsLanguageManagedByEZOCore() then
+        local ok, inherited = pcall(function()
+            return EZOCore:GetLanguage()
+        end)
+        if ok and (inherited == "es" or inherited == "en") then
+            return inherited
         end
-        return GetClientLanguage()
+    end
+    if language == LANGUAGE_INHERIT then
+        language = LANGUAGE_AUTO
     end
     if language == "es" or language == "en" then
         return language
@@ -59,7 +59,20 @@ end
 
 function EZOA.IsForcedLanguage(language)
     language = tostring(language or EZOA.GetDefaultLanguage())
+    if EZOA.IsLanguageManagedByEZOCore and EZOA.IsLanguageManagedByEZOCore() then
+        return false
+    end
     return language == "es" or language == "en"
+end
+
+function EZOA.IsLanguageManagedByEZOCore()
+    if not (EZOCore and type(EZOCore.IsLanguageGloballyManaged) == "function") then
+        return false
+    end
+    local ok, managed = pcall(function()
+        return EZOCore:IsLanguageGloballyManaged()
+    end)
+    return ok and managed == true
 end
 
 function EZOA.ApplyLanguagePreference(language)
@@ -78,8 +91,8 @@ function EZOA.RegisterEZOCoreLanguageCallback()
     local eventName = EZOCore.EVENT_LANGUAGE_CHANGED or "EZO_CORE_LANGUAGE_CHANGED"
     local ok, result = pcall(function()
         return EZOCore:RegisterCallback(eventName, function()
-            if EZOA.sv and EZOA.sv.general and EZOA.sv.general.language == LANGUAGE_INHERIT then
-                EZOA.ApplyLanguagePreference(LANGUAGE_INHERIT)
+            if EZOA.sv and EZOA.sv.general then
+                EZOA.ApplyLanguagePreference(EZOA.sv.general.language or EZOA.GetDefaultLanguage())
                 if EZOAlerts_Renderer and EZOAlerts_Renderer.Refresh then
                     EZOAlerts_Renderer.Refresh()
                 end
