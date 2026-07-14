@@ -9,6 +9,7 @@ EZOA.LANGUAGE_INHERIT = LANGUAGE_INHERIT
 EZOA.LANGUAGE_AUTO = LANGUAGE_AUTO
 
 local languageCallbackRegistered = false
+local ezocoreRegistered = false
 
 local function Print(message)
     if LibChatMessage then
@@ -103,6 +104,32 @@ function EZOA.RegisterEZOCoreLanguageCallback()
     return languageCallbackRegistered
 end
 
+function EZOA.RegisterWithEZOCore()
+    if ezocoreRegistered
+        or not (EZOCore and type(EZOCore.RegisterAddon) == "function") then
+        return false
+    end
+
+    local ok, result = pcall(function()
+        return EZOCore:RegisterAddon({
+            id = "ezoalerts",
+            name = EZOA.ADDON_NAME or ADDON_NAME,
+            version = EZOA.ADDON_VERSION or "0.0.0",
+            addOnVersion = 10020,
+            apiVersion = 1,
+            capabilities = {
+                "alerts.screen",
+                "alerts.groupChat",
+                "family.language.consumer",
+                "family.settings.consumer",
+            },
+        })
+    end)
+
+    ezocoreRegistered = ok and result == true
+    return ezocoreRegistered
+end
+
 function EZOA:Initialize()
     if EZOAlerts_SavedVars and EZOAlerts_SavedVars.Init then
         EZOAlerts_SavedVars.Init()
@@ -110,6 +137,7 @@ function EZOA:Initialize()
 
     EZOA.ApplyLanguagePreference(self.sv.general.language or EZOA.GetDefaultLanguage())
     EZOA.RegisterEZOCoreLanguageCallback()
+    EZOA.RegisterWithEZOCore()
 
     if EZOAlerts_Registry and EZOAlerts_Registry.Init then
         EZOAlerts_Registry.Init()
