@@ -3,7 +3,12 @@ EZOAlerts = EZOAlerts or {}
 local EZOA = EZOAlerts
 
 local ADDON_NAME = "EZOAlerts"
+local LANGUAGE_INHERIT = "inherit"
 local LANGUAGE_AUTO = "auto"
+EZOA.LANGUAGE_INHERIT = LANGUAGE_INHERIT
+EZOA.LANGUAGE_AUTO = LANGUAGE_AUTO
+
+local languageCallbackRegistered = false
 
 local function Print(message)
     if LibChatMessage then
@@ -26,7 +31,7 @@ local function GetClientLanguage()
 end
 
 function EZOA.GetDefaultLanguage()
-    return LANGUAGE_AUTO
+    return LANGUAGE_INHERIT
 end
 
 function EZOA.GetClientLanguage()
@@ -34,7 +39,18 @@ function EZOA.GetClientLanguage()
 end
 
 function EZOA.GetEffectiveLanguage(language)
-    language = tostring(language or LANGUAGE_AUTO)
+    language = tostring(language or EZOA.GetDefaultLanguage())
+    if language == LANGUAGE_INHERIT then
+        if EZOCore and type(EZOCore.GetLanguage) == "function" then
+            local ok, inherited = pcall(function()
+                return EZOCore:GetLanguage()
+            end)
+            if ok and (inherited == "es" or inherited == "en") then
+                return inherited
+            end
+        end
+        return GetClientLanguage()
+    end
     if language == "es" or language == "en" then
         return language
     end
@@ -42,8 +58,36 @@ function EZOA.GetEffectiveLanguage(language)
 end
 
 function EZOA.IsForcedLanguage(language)
-    language = tostring(language or LANGUAGE_AUTO)
+    language = tostring(language or EZOA.GetDefaultLanguage())
     return language == "es" or language == "en"
+end
+
+function EZOA.ApplyLanguagePreference(language)
+    local configuredLanguage = tostring(language or EZOA.GetDefaultLanguage())
+    if EZOAlerts_Lang and EZOAlerts_Lang.Apply then
+        EZOAlerts_Lang.Apply(configuredLanguage)
+    end
+end
+
+function EZOA.RegisterEZOCoreLanguageCallback()
+    if languageCallbackRegistered
+        or not (EZOCore and type(EZOCore.RegisterCallback) == "function") then
+        return false
+    end
+
+    local eventName = EZOCore.EVENT_LANGUAGE_CHANGED or "EZO_CORE_LANGUAGE_CHANGED"
+    local ok, result = pcall(function()
+        return EZOCore:RegisterCallback(eventName, function()
+            if EZOA.sv and EZOA.sv.general and EZOA.sv.general.language == LANGUAGE_INHERIT then
+                EZOA.ApplyLanguagePreference(LANGUAGE_INHERIT)
+                if EZOAlerts_Renderer and EZOAlerts_Renderer.Refresh then
+                    EZOAlerts_Renderer.Refresh()
+                end
+            end
+        end)
+    end)
+    languageCallbackRegistered = ok and result == true
+    return languageCallbackRegistered
 end
 
 function EZOA:Initialize()
@@ -51,9 +95,8 @@ function EZOA:Initialize()
         EZOAlerts_SavedVars.Init()
     end
 
-    if EZOAlerts_Lang and EZOAlerts_Lang.Apply then
-        EZOAlerts_Lang.Apply(self.sv.general.language or LANGUAGE_AUTO)
-    end
+    EZOA.ApplyLanguagePreference(self.sv.general.language or EZOA.GetDefaultLanguage())
+    EZOA.RegisterEZOCoreLanguageCallback()
 
     if EZOAlerts_Registry and EZOAlerts_Registry.Init then
         EZOAlerts_Registry.Init()

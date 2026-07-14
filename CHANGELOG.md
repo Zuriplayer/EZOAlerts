@@ -1,7 +1,8 @@
 # Changelog
 
-## Unreleased
+## 0.1.20 - Settings panel polish
 
+- Reformats the settings panel with EZO-style informational section headers and field-specific tooltips.
 - Registers EZOAlerts controls inside the native `Settings > EZO` window when EZOCore is available.
 - Keeps the standalone LibAddonMenu panel only as a compatibility fallback when EZOCore is unavailable.
 - Adds the permanent EZO Discord feedback link to the settings header.

@@ -15,8 +15,8 @@ El addon se centra actualmente en avisos de grupo y coherencia de rol. No sustit
 
 ## Metadatos de versión
 
-- Versión del addon: `0.1.19`
-- AddOnVersion: `10019`
+- Versión del addon: `0.1.20`
+- AddOnVersion: `10020`
 - APIVersion: `101049 101050`
 - Estado: beta pública
 
@@ -94,6 +94,8 @@ El addon se centra actualmente en avisos de grupo y coherencia de rol. No sustit
   - No imprime resúmenes de log en la ventana normal de chat.
 
 ## Opciones Principales de Configuración
+
+Las secciones de configuración usan cabeceras informativas de estilo EZO con un icono morado de ayuda. La ayuda general está en el tooltip de la cabecera; la ayuda específica de cada ajuste está en el tooltip del propio campo.
 
 - General:
   - Idioma: automático, inglés o español.

@@ -2,12 +2,10 @@
 EZOAlerts_SavedVars = EZOAlerts_SavedVars or {}
 local MOD = EZOAlerts_SavedVars
 
-local LANGUAGE_AUTO = "auto"
-
 function MOD.GetDefaults()
     return {
         general = {
-            language = LANGUAGE_AUTO,
+            language = EZOAlerts.GetDefaultLanguage and EZOAlerts.GetDefaultLanguage() or "inherit",
             log = false,
         },
         alerts = {

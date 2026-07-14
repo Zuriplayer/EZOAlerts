@@ -6,6 +6,7 @@ local ADDON_NAME = "EZOAlerts"
 local DISPLAY_NAME = "E|cB040FFZ|rOAlerts"
 local PANEL_ID = "EZOAlerts_Panel"
 local FEEDBACK_URL = "https://discord.gg/ekw8zUAcRm"
+local INFO_HEADER_TEXTURE = "EsoUI/Art/Miscellaneous/help_icon.dds"
 
 local function MsToSeconds(value, fallbackMs)
     local ms = tonumber(value) or fallbackMs or 0
@@ -28,6 +29,20 @@ local function WarnForcedLanguage()
         EZOAlerts.Print(GetString(EZOA_MSG_LANGUAGE_FORCED_WARNING))
     end
 end
+
+local function CreateInfoHeader(name, tooltip)
+    return {
+        type = "header",
+        name = zo_strformat(
+            "<<1>> |cB040FF|t26:26:<<2>>:inheritcolor|t|r",
+            tostring(name or ""),
+            INFO_HEADER_TEXTURE
+        ),
+        tooltip = tooltip,
+    }
+end
+
+MENU.CreateInfoHeader = CreateInfoHeader
 
 local function GetChestSettings()
     EZOAlerts.sv.producers = EZOAlerts.sv.producers or {}
@@ -87,24 +102,35 @@ end
 local function GetOptions()
     local EZOA = EZOAlerts
     return {
-        { type = "header", name = GetString(EZOA_OPTION_GENERAL) },
+        CreateInfoHeader(GetString(EZOA_OPTION_GENERAL), GetString(EZOA_OPTION_GENERAL_TOOLTIP)),
         {
             type          = "dropdown",
             name          = GetString(EZOA_OPTION_LANGUAGE),
-            choices       = { GetString(EZOA_OPTION_LANGUAGE_AUTO), "English", "Espanol" },
-            choicesValues = { "auto", "en", "es" },
-            getFunc       = function() return EZOA.sv.general.language or "auto" end,
+            choices       = {
+                GetString(EZOA_OPTION_LANGUAGE_INHERIT),
+                GetString(EZOA_OPTION_LANGUAGE_AUTO),
+                "English",
+                "Espanol",
+            },
+            choicesValues = { "inherit", "auto", "en", "es" },
+            getFunc       = function()
+                return EZOA.sv.general.language
+                    or (EZOA.GetDefaultLanguage and EZOA.GetDefaultLanguage())
+                    or "inherit"
+            end,
             setFunc       = function(value)
-                value = tostring(value or "auto")
+                value = tostring(value or (EZOA.GetDefaultLanguage and EZOA.GetDefaultLanguage()) or "inherit")
                 EZOA.sv.general.language = value
-                if EZOAlerts_Lang and EZOAlerts_Lang.Apply then
+                if EZOA.ApplyLanguagePreference then
+                    EZOA.ApplyLanguagePreference(value)
+                elseif EZOAlerts_Lang and EZOAlerts_Lang.Apply then
                     EZOAlerts_Lang.Apply(value)
                 end
                 if EZOA.IsForcedLanguage and EZOA.IsForcedLanguage(value) then
                     WarnForcedLanguage()
                 end
             end,
-            default = "auto",
+            default = (EZOA.GetDefaultLanguage and EZOA.GetDefaultLanguage()) or "inherit",
             width   = "half",
             tooltip = GetString(EZOA_OPTION_LANGUAGE_TOOLTIP),
         },
@@ -118,10 +144,11 @@ local function GetOptions()
             width   = "full",
         },
 
-        { type = "header", name = GetString(EZOA_OPTION_ALERTS) },
+        CreateInfoHeader(GetString(EZOA_OPTION_ALERTS), GetString(EZOA_OPTION_ALERTS_TOOLTIP)),
         {
             type    = "checkbox",
             name    = GetString(EZOA_OPTION_ALERTS_ENABLED),
+            tooltip = GetString(EZOA_OPTION_ALERTS_ENABLED_TOOLTIP),
             getFunc = function() return EZOA.sv.channels.screen ~= false end,
             setFunc = function(value)
                 EZOA.sv.channels.screen = value == true
@@ -155,6 +182,7 @@ local function GetOptions()
         {
             type     = "slider",
             name     = GetString(EZOA_OPTION_SCALE),
+            tooltip  = GetString(EZOA_OPTION_SCALE_TOOLTIP),
             min      = 0.6,
             max      = 1.8,
             step     = 0.05,
@@ -170,7 +198,12 @@ local function GetOptions()
         {
             type          = "dropdown",
             name          = GetString(EZOA_OPTION_ANCHOR),
-            choices       = { GetString(EZOA_OPTION_ANCHOR_CENTER), GetString(EZOA_OPTION_ANCHOR_TOP), GetString(EZOA_OPTION_ANCHOR_BOTTOM) },
+            tooltip       = GetString(EZOA_OPTION_ANCHOR_TOOLTIP),
+            choices       = {
+                GetString(EZOA_OPTION_ANCHOR_CENTER),
+                GetString(EZOA_OPTION_ANCHOR_TOP),
+                GetString(EZOA_OPTION_ANCHOR_BOTTOM),
+            },
             choicesValues = { "CENTER", "TOP", "BOTTOM" },
             getFunc       = function() return EZOA.sv.alerts.anchor or "CENTER" end,
             setFunc       = function(value)
@@ -201,6 +234,7 @@ local function GetOptions()
         {
             type    = "button",
             name    = GetString(EZOA_OPTION_TEST_ALERT),
+            tooltip = GetString(EZOA_OPTION_TEST_ALERT_TOOLTIP),
             func    = function()
                 if EZOAlerts.ShowAlert then
                     EZOAlerts.ShowAlert(GetString(EZOA_TEST_ALERT_TEXT), EZOAlerts.ALERT_KIND_INFO)
@@ -220,7 +254,7 @@ local function GetOptions()
             width   = "full",
         },
 
-        { type = "header", name = GetString(EZOA_OPTION_GENERATED_ALERTS) },
+        CreateInfoHeader(GetString(EZOA_OPTION_GENERATED_ALERTS), GetString(EZOA_OPTION_GENERATED_ALERTS_TOOLTIP)),
         {
             type    = "checkbox",
             name    = GetString(EZOA_OPTION_CHESTS_ENABLED),
@@ -319,7 +353,10 @@ local function GetOptions()
                 if EZOAlerts_ProducerGroupLeaderZone and EZOAlerts_ProducerGroupLeaderZone.Reset then
                     EZOAlerts_ProducerGroupLeaderZone.Reset()
                 end
-                if value == true and EZOAlerts_ProducerGroupLeaderZone and EZOAlerts_ProducerGroupLeaderZone.QueueScan then
+                if value == true
+                    and EZOAlerts_ProducerGroupLeaderZone
+                    and EZOAlerts_ProducerGroupLeaderZone.QueueScan
+                then
                     EZOAlerts_ProducerGroupLeaderZone.QueueScan()
                 end
             end,
@@ -351,7 +388,11 @@ local function GetOptions()
             type          = "dropdown",
             name          = GetString(EZOA_OPTION_ROLE_CHECK_MODE),
             tooltip       = GetString(EZOA_OPTION_ROLE_CHECK_MODE_TOOLTIP),
-            choices       = { GetString(EZOA_OPTION_ROLE_CHECK_DISABLED), GetString(EZOA_OPTION_ROLE_CHECK_ALARMS), GetString(EZOA_OPTION_ROLE_CHECK_ALL) },
+            choices       = {
+                GetString(EZOA_OPTION_ROLE_CHECK_DISABLED),
+                GetString(EZOA_OPTION_ROLE_CHECK_ALARMS),
+                GetString(EZOA_OPTION_ROLE_CHECK_ALL),
+            },
             choicesValues = { "disabled", "alarms", "all" },
             getFunc       = function() return GetRoleCheckSettings().mode or "alarms" end,
             setFunc       = function(value)

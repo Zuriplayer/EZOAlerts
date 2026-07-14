@@ -15,8 +15,8 @@ The addon currently focuses on group and role-awareness alerts. It does not repl
 
 ## Version Metadata
 
-- Addon version: `0.1.19`
-- AddOnVersion: `10019`
+- Addon version: `0.1.20`
+- AddOnVersion: `10020`
 - APIVersion: `101049 101050`
 - Status: public beta
 
@@ -94,6 +94,8 @@ The addon currently focuses on group and role-awareness alerts. It does not repl
   - It does not print log summaries to the normal chat window.
 
 ## Main Configuration Options
+
+Configuration sections use EZO-style informational headers with a purple help icon. General help is attached to the section heading; setting-specific help is attached to each field tooltip.
 
 - General:
   - Language: automatic, English or Spanish.
