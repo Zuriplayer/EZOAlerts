@@ -4,6 +4,8 @@ local MENU = EZOAlerts_Menu
 
 local ADDON_NAME = "EZOAlerts"
 local DISPLAY_NAME = "E|cB040FFZ|rOAlerts"
+local PANEL_ID = "EZOAlerts_Panel"
+local FEEDBACK_URL = "https://discord.gg/ekw8zUAcRm"
 
 local function MsToSeconds(value, fallbackMs)
     local ms = tonumber(value) or fallbackMs or 0
@@ -420,13 +422,23 @@ function MENU.Init()
         displayName         = DISPLAY_NAME,
         author              = "@Zuriplayer",
         version             = EZOAlerts.ADDON_VERSION,
+        feedback            = FEEDBACK_URL,
         registerForRefresh  = true,
         registerForDefaults = true,
     }
 
-    local panel = LAM:RegisterAddonPanel("EZOAlerts_Panel", panelData)
+    local options = GetOptions()
+    if EZOCore and type(EZOCore.RegisterSettingsPanel) == "function" then
+        local registered = EZOCore:RegisterSettingsPanel(ADDON_NAME, PANEL_ID, panelData, options)
+        if registered then
+            EZOAlerts.ezoSettingsRegistered = true
+            return
+        end
+    end
+
+    local panel = LAM:RegisterAddonPanel(PANEL_ID, panelData)
     EZOAlerts._lamPanel = panel
     _G.EZOAlerts_Panel = panel
 
-    LAM:RegisterOptionControls("EZOAlerts_Panel", GetOptions())
+    LAM:RegisterOptionControls(PANEL_ID, options)
 end

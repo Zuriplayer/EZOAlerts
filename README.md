@@ -9,14 +9,14 @@ Support, bug reports and suggestions: https://discord.gg/ekw8zUAcRm
 
 ## Current Scope
 
-EZOAlerts provides a small alert system with internal producers, a shared HUD alert window, controlled group-chat output and a LibAddonMenu configuration panel. It is standalone for now, with a compact API and structure that can be integrated into EZOTools later if that becomes useful.
+EZOAlerts provides a small alert system with internal producers, a shared HUD alert window and controlled group-chat output. When EZOCore is active, its configuration is embedded in `Settings > EZO`; otherwise it registers a standalone LibAddonMenu panel.
 
 The addon currently focuses on group and role-awareness alerts. It does not replace combat UI, group frames, action bars or ESO systems.
 
 ## Version Metadata
 
-- Addon version: `0.1.18`
-- AddOnVersion: `10018`
+- Addon version: `0.1.19`
+- AddOnVersion: `10019`
 - APIVersion: `101049 101050`
 - Status: public beta
 
@@ -24,7 +24,9 @@ The addon currently focuses on group and role-awareness alerts. It does not repl
 
 - The Elder Scrolls Online.
 - LibAddonMenu-2.0.
-- Optional: LibChatMessage, used only for cleaner local addon messages when available.
+- Optional: EZOCore for the central `Settings > EZO` configuration.
+- Optional: LibChatMessage for cleaner local addon messages.
+- Optional: LibDebugLogger and DebugLogViewer for the combat log output.
 
 ## Installation
 
@@ -34,7 +36,7 @@ The addon currently focuses on group and role-awareness alerts. It does not repl
    - or `Documents/Elder Scrolls Online/pts/AddOns/EZOAlerts`
 3. Make sure `LibAddonMenu-2.0` is installed and enabled.
 4. Start ESO or run `/reloadui`.
-5. Configure the addon from `Settings > Addons > EZOAlerts`.
+5. Configure the addon from `Settings > EZO > EZOAlerts`. Without EZOCore, use the standalone `Settings > Addons > EZOAlerts` panel.
 
 ## Implemented Features
 
@@ -91,7 +93,7 @@ The addon currently focuses on group and role-awareness alerts. It does not repl
   - Log output is grouped and dumped to LibDebugLogger/DebugLogViewer after combat when available.
   - It does not print log summaries to the normal chat window.
 
-## Main LibAddonMenu Options
+## Main Configuration Options
 
 - General:
   - Language: automatic, English or Spanish.
@@ -132,7 +134,8 @@ Group-chat alerts are intentionally constrained by addon settings, group state a
 
 - Load the addon with no Lua errors.
 - Run `/reloadui`.
-- Open the LibAddonMenu panel.
+- Open `Settings > EZO > EZOAlerts` and confirm the controls remain inside the EZO window.
+- With EZOCore disabled, confirm the standalone LibAddonMenu panel is available.
 - Switch language between automatic, English and Spanish.
 - Use the test screen alert.
 - Use the test group message while grouped.

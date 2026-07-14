@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Registers EZOAlerts controls inside the native `Settings > EZO` window when EZOCore is available.
+- Keeps the standalone LibAddonMenu panel only as a compatibility fallback when EZOCore is unavailable.
+- Adds the permanent EZO Discord feedback link to the settings header.
+
 ## 0.1.19 - Log noise fix
 
 - Restricted the optional central log to combat-time entries and post-combat DebugLogViewer output.
