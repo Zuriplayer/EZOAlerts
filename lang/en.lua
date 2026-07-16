@@ -2,7 +2,7 @@
 EZOALERTS_STRINGS_EN = {
     EZOA_MSG_INIT = "E|cB040FFZ|rOAlerts initialized.",
     EZOA_MSG_LANGUAGE_FORCED_WARNING = "Forced language: ESO names may use the game language.",
-    EZOA_MSG_MOVE_WINDOW_HINT = "Close menus to see and move the alert window.",
+    EZOA_MSG_MOVE_WINDOW_HINT = "Close menus and drag the alert window with the left mouse button.",
 
     EZOA_OPTION_GENERAL = "General",
     EZOA_OPTION_GENERAL_TOOLTIP = "Language and diagnostic output options for EZOAlerts.",
@@ -37,7 +37,7 @@ EZOALERTS_STRINGS_EN = {
     EZOA_OPTION_ANCHOR_TOP = "Top",
     EZOA_OPTION_ANCHOR_BOTTOM = "Bottom",
     EZOA_OPTION_MOVE_WINDOW = "Move alert window",
-    EZOA_OPTION_MOVE_WINDOW_TOOLTIP = "Shows a movable preview of the shared alert window. It hides and turns off when combat starts.",
+    EZOA_OPTION_MOVE_WINDOW_TOOLTIP = "Shows a movable preview of the shared alert window. Drag it with the left mouse button. It hides and turns off when combat starts.",
     EZOA_OPTION_TEST_ALERT = "Show test alert",
     EZOA_OPTION_TEST_ALERT_TOOLTIP = "Shows a local test alert in the shared HUD window.",
     EZOA_OPTION_TEST_GROUP_CHAT = "Send test group message",

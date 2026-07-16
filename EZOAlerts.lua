@@ -11,6 +11,7 @@ EZOA.LANGUAGE_AUTO = LANGUAGE_AUTO
 local languageCallbackRegistered = false
 local ezocoreRegistered = false
 local layoutSurfaceRegistered = false
+local debugControllerRegistered = false
 
 local function Print(message)
     if LibChatMessage then
@@ -116,11 +117,12 @@ function EZOA.RegisterWithEZOCore()
             id = "ezoalerts",
             name = EZOA.ADDON_NAME or ADDON_NAME,
             version = EZOA.ADDON_VERSION or "0.0.0",
-            addOnVersion = 10020,
+            addOnVersion = 10022,
             apiVersion = 1,
             capabilities = {
                 "alerts.screen",
                 "alerts.groupChat",
+                "family.debug.controller",
                 "family.layout.consumer",
                 "family.language.consumer",
                 "family.settings.consumer",
@@ -130,6 +132,39 @@ function EZOA.RegisterWithEZOCore()
 
     ezocoreRegistered = ok and result == true
     return ezocoreRegistered
+end
+
+function EZOA.RegisterDebugWithEZOCore()
+    if debugControllerRegistered
+        or not (EZOCore and type(EZOCore.GetService) == "function") then
+        return false
+    end
+
+    local service = EZOCore:GetService("family.debug", 1)
+    if not service or type(service.RegisterController) ~= "function" then
+        return false
+    end
+
+    local ok, result = pcall(function()
+        return service:RegisterController({
+            id = "ezoalerts.event-log",
+            addonId = "ezoalerts",
+            addonName = "EZOAlerts",
+            name = function() return GetString(EZOA_OPTION_LOG_ENABLED) end,
+            isEnabled = function()
+                return EZOA.sv and EZOA.sv.general and EZOA.sv.general.log == true
+            end,
+            setEnabled = function(enabled)
+                if EZOA.sv and EZOA.sv.general then
+                    EZOA.sv.general.log = enabled == true
+                end
+                return true
+            end,
+        })
+    end)
+
+    debugControllerRegistered = ok and result == true
+    return debugControllerRegistered
 end
 
 function EZOA.RegisterLayoutWithEZOCore()
@@ -175,6 +210,7 @@ function EZOA:Initialize()
     EZOA.ApplyLanguagePreference(self.sv.general.language or EZOA.GetDefaultLanguage())
     EZOA.RegisterEZOCoreLanguageCallback()
     EZOA.RegisterWithEZOCore()
+    EZOA.RegisterDebugWithEZOCore()
 
     if EZOAlerts_Registry and EZOAlerts_Registry.Init then
         EZOAlerts_Registry.Init()

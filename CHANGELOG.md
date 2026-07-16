@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.22 - Shared diagnostics control
+
+- Registers the optional event-log mode with EZOCore so the family-wide action can disable it.
+- Keeps the existing local logging setting and standalone behavior unchanged without EZOCore.
+- Restricts alert-window dragging to the left mouse button.
+
 ## 0.1.21 - Shared layout integration
 
 - Registers the alert preview with EZOCore `family.layout` for global or individual movement control.

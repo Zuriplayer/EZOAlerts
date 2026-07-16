@@ -1,6 +1,6 @@
 -- Constantes compartidas de EZOAlerts.
 EZOAlerts.ADDON_NAME    = "EZOAlerts"
-EZOAlerts.ADDON_VERSION = "0.1.21"
+EZOAlerts.ADDON_VERSION = "0.1.22"
 EZOAlerts.AUTHOR        = "@Zuriplayer"
 
 EZOAlerts.ALERT_KIND_INFO    = "info"

@@ -2,7 +2,7 @@
 EZOALERTS_STRINGS_ES = {
     EZOA_MSG_INIT = "E|cB040FFZ|rOAlerts inicializado.",
     EZOA_MSG_LANGUAGE_FORCED_WARNING = "Idioma forzado: los nombres de ESO pueden usar el idioma del juego.",
-    EZOA_MSG_MOVE_WINDOW_HINT = "Cierra los menus para ver y mover la ventana de avisos.",
+    EZOA_MSG_MOVE_WINDOW_HINT = "Cierra los menus y arrastra la ventana de avisos con el boton izquierdo.",
 
     EZOA_OPTION_GENERAL = "General",
     EZOA_OPTION_GENERAL_TOOLTIP = "Opciones de idioma y salida diagnóstica de EZOAlerts.",
@@ -37,7 +37,7 @@ EZOALERTS_STRINGS_ES = {
     EZOA_OPTION_ANCHOR_TOP = "Arriba",
     EZOA_OPTION_ANCHOR_BOTTOM = "Abajo",
     EZOA_OPTION_MOVE_WINDOW = "Mover ventana de avisos",
-    EZOA_OPTION_MOVE_WINDOW_TOOLTIP = "Muestra una previsualizacion movible de la ventana comun. Se oculta y se desactiva al entrar en combate.",
+    EZOA_OPTION_MOVE_WINDOW_TOOLTIP = "Muestra una previsualizacion movible de la ventana comun. Arrastrala con el boton izquierdo. Se oculta y se desactiva al entrar en combate.",
     EZOA_OPTION_TEST_ALERT = "Mostrar aviso de prueba",
     EZOA_OPTION_TEST_ALERT_TOOLTIP = "Muestra un aviso local de prueba en la ventana HUD compartida.",
     EZOA_OPTION_TEST_GROUP_CHAT = "Enviar mensaje de grupo de prueba",

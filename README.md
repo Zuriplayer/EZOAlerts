@@ -15,8 +15,8 @@ The addon currently focuses on group and role-awareness alerts. It does not repl
 
 ## Version Metadata
 
-- Addon version: `0.1.20`
-- AddOnVersion: `10020`
+- Addon version: `0.1.22`
+- AddOnVersion: `10022`
 - APIVersion: `101049 101050`
 - Status: public beta
 
@@ -43,7 +43,8 @@ The addon currently focuses on group and role-awareness alerts. It does not repl
 - Shared on-screen alert window:
   - HUD/HUD UI-only visibility.
   - Info, warning and error styles.
-  - Movable preview from LibAddonMenu.
+  - Movable preview from the configuration panel or EZOCore shared layout mode.
+  - Left-mouse-button dragging while move mode is active.
   - Scale, anchor and temporary-alert duration settings.
   - Keyboard/gamepad prompt text for alert actions when ESO exposes the input mode.
 
@@ -85,6 +86,7 @@ The addon currently focuses on group and role-awareness alerts. It does not repl
 
 - Localization:
   - English and Spanish.
+  - Can inherit the shared EZO-family language from EZOCore when available.
   - Automatic mode follows the ESO client language; unsupported languages fall back to English.
 
 - Optional central log:
@@ -92,13 +94,14 @@ The addon currently focuses on group and role-awareness alerts. It does not repl
   - Producers record combat-time events into a single log bus.
   - Log output is grouped and dumped to LibDebugLogger/DebugLogViewer after combat when available.
   - It does not print log summaries to the normal chat window.
+  - When EZOCore provides the family debug service, this log can be disabled by the shared EZO debug control.
 
 ## Main Configuration Options
 
 Configuration sections use EZO-style informational headers with a purple help icon. General help is attached to the section heading; setting-specific help is attached to each field tooltip.
 
 - General:
-  - Language: automatic, English or Spanish.
+  - Language: use EZOCore global setting, automatic, English or Spanish.
   - Log: enable one shared post-combat DebugLogViewer log.
 
 - Alerts:
@@ -137,6 +140,7 @@ Group-chat alerts are intentionally constrained by addon settings, group state a
 - Load the addon with no Lua errors.
 - Run `/reloadui`.
 - Open `Settings > EZO > EZOAlerts` and confirm the controls remain inside the EZO window.
+- If EZOCore debug controls are available, confirm the shared disable action can turn off EZOAlerts `Log`.
 - With EZOCore disabled, confirm the standalone LibAddonMenu panel is available.
 - Switch language between automatic, English and Spanish.
 - Use the test screen alert.

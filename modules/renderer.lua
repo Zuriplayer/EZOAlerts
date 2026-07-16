@@ -245,8 +245,13 @@ local function ApplyMoveState()
     end
 
     local canMove = MOD.moveMode == true and CanShowWindow() and not IsInCombat()
+    MOD.canMove = canMove
+    if MOD.dragActive and not canMove then
+        control:StopMovingOrResizing()
+        MOD.dragActive = false
+    end
     control:SetMouseEnabled(canMove or MOD.hasActions == true)
-    control:SetMovable(canMove)
+    control:SetMovable(false)
     control:SetClampedToScreen(true)
 end
 
@@ -382,7 +387,25 @@ local function EnsureControl()
     if type(control.SetDrawLevel) == "function" then
         control:SetDrawLevel(100)
     end
+    control:SetHandler("OnMouseDown", function(_, button)
+        if button ~= MOUSE_BUTTON_INDEX_LEFT or MOD.canMove ~= true then
+            return
+        end
+        MOD.dragActive = true
+        control:SetMovable(true)
+        control:StartMoving()
+    end)
+    control:SetHandler("OnMouseUp", function(_, button)
+        if button ~= MOUSE_BUTTON_INDEX_LEFT or MOD.dragActive ~= true then
+            return
+        end
+        control:StopMovingOrResizing()
+        MOD.dragActive = false
+        control:SetMovable(false)
+    end)
     control:SetHandler("OnMoveStop", function()
+        MOD.dragActive = false
+        control:SetMovable(false)
         SaveCurrentPosition()
     end)
 

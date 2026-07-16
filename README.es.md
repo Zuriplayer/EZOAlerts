@@ -15,8 +15,8 @@ El addon se centra actualmente en avisos de grupo y coherencia de rol. No sustit
 
 ## Metadatos de versión
 
-- Versión del addon: `0.1.20`
-- AddOnVersion: `10020`
+- Versión del addon: `0.1.22`
+- AddOnVersion: `10022`
 - APIVersion: `101049 101050`
 - Estado: beta pública
 
@@ -43,7 +43,8 @@ El addon se centra actualmente en avisos de grupo y coherencia de rol. No sustit
 - Ventana compartida de avisos en pantalla:
   - Visibilidad solo en HUD/HUD UI.
   - Estilos de información, warning y error.
-  - Previsualización movible desde LibAddonMenu.
+  - Previsualización movible desde el panel de configuración o el modo compartido de disposición de EZOCore.
+  - Arrastre con botón izquierdo mientras el modo mover está activo.
   - Ajustes de escala, ancla de posición y duración de avisos temporales.
   - Texto de acción para teclado/gamepad cuando ESO expone el modo de entrada.
 
@@ -85,6 +86,7 @@ El addon se centra actualmente en avisos de grupo y coherencia de rol. No sustit
 
 - Localización:
   - Inglés y español.
+  - Puede heredar el idioma compartido de la familia EZO desde EZOCore cuando está disponible.
   - El modo automático sigue el idioma del cliente de ESO; los idiomas no soportados usan inglés.
 
 - Log central opcional:
@@ -92,13 +94,14 @@ El addon se centra actualmente en avisos de grupo y coherencia de rol. No sustit
   - Los productores registran eventos ocurridos durante combate en un bus de log común.
   - La salida del log se agrupa y se vuelca en LibDebugLogger/DebugLogViewer al terminar el combate si está disponible.
   - No imprime resúmenes de log en la ventana normal de chat.
+  - Cuando EZOCore proporciona el servicio familiar de debug, este log puede desactivarse desde el control compartido de debug de EZO.
 
 ## Opciones Principales de Configuración
 
 Las secciones de configuración usan cabeceras informativas de estilo EZO con un icono morado de ayuda. La ayuda general está en el tooltip de la cabecera; la ayuda específica de cada ajuste está en el tooltip del propio campo.
 
 - General:
-  - Idioma: automático, inglés o español.
+  - Idioma: usar ajuste global de EZOCore, automático, inglés o español.
   - Log: activa un único log compartido post-combate para DebugLogViewer.
 
 - Avisos:
@@ -137,6 +140,7 @@ Los avisos al chat de grupo están limitados intencionadamente por la configurac
 - Cargar el addon sin errores Lua.
 - Ejecutar `/reloadui`.
 - Abrir `Settings > EZO > EZOAlerts` y confirmar que los controles permanecen dentro de la ventana EZO.
+- Si los controles de debug de EZOCore están disponibles, confirmar que la acción compartida puede desactivar el `Log` de EZOAlerts.
 - Con EZOCore desactivado, confirmar que está disponible el panel independiente de LibAddonMenu.
 - Cambiar idioma entre automático, inglés y español.
 - Usar el aviso de prueba en pantalla.
