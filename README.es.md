@@ -15,8 +15,8 @@ El addon se centra actualmente en avisos de grupo y coherencia de rol. No sustit
 
 ## Metadatos de versión
 
-- Versión del addon: `0.1.22`
-- AddOnVersion: `10022`
+- Versión del addon: `0.1.24`
+- AddOnVersion: `10024`
 - APIVersion: `101049 101050`
 - Estado: beta pública
 
@@ -25,6 +25,7 @@ El addon se centra actualmente en avisos de grupo y coherencia de rol. No sustit
 - The Elder Scrolls Online.
 - LibAddonMenu-2.0.
 - Opcional: EZOCore para la configuración central en `Settings > EZO`.
+- Opcional: LibGroupBroadcast mediante EZOCore para avisos visuales compartidos en grupo.
 - Opcional: LibChatMessage para mensajes locales del addon más limpios.
 - Opcional: LibDebugLogger y DebugLogViewer para la salida del log de combate.
 
@@ -55,18 +56,21 @@ El addon se centra actualmente en avisos de grupo y coherencia de rol. No sustit
 
 - Avisos de cofres:
   - Detecta apertura de cofres mediante eventos de ganzúa y botín.
-  - Informa del jugador y de la calidad de cerradura detectada.
+  - Informa del nombre del personaje y de la calidad de cerradura detectada.
   - Solo genera mensajes estando en grupo.
+  - Puede aparecer como aviso temporal local en el HUD de jugadores compatibles del grupo que tengan EZOCore, LibGroupBroadcast y EZOAlerts cargados.
   - Incluye activación, salida al chat de grupo y tiempo de espera configurables.
 
 - Avisos de sacos pesados:
   - Detecta sacos pesados mediante información del objetivo de botín.
+  - Informa del nombre del personaje cuando ESO lo proporciona.
   - Solo genera mensajes estando en grupo.
+  - Puede aparecer como aviso temporal local en el HUD de jugadores compatibles del grupo que tengan EZOCore, LibGroupBroadcast y EZOAlerts cargados.
   - Incluye activación, salida al chat de grupo y tiempo de espera configurables.
 
 - Avisos de guild compartida:
   - Compara los miembros del grupo con tus cinco guilds de ESO.
-  - Muestra un mensaje solo local con las guilds compartidas con cada miembro detectado.
+  - Muestra un mensaje solo local con las guilds compartidas con cada miembro detectado, usando nombres de personaje cuando ESO los proporciona.
   - Puede suprimir la detección si el líder del grupo comparte guild contigo, para reducir ruido durante eventos de guild.
 
 - Aviso de zona del líder:
@@ -132,6 +136,8 @@ Las secciones de configuración usan cabeceras informativas de estilo EZO con un
 - No registra keybindings propios.
 - No sustituye barras de habilidades, marcos de grupo ni menús de ESO.
 - No publica en Discord ni ejecuta workflows externos desde el addon.
+- Los avisos visuales compartidos de grupo requieren EZOCore, el transporte de LibGroupBroadcast y EZOAlerts en el cliente receptor.
+- Los avisos recibidos de cofres y sacos pesados respetan el ajuste del productor correspondiente y el canal global de avisos en pantalla del cliente receptor.
 
 Los avisos al chat de grupo están limitados intencionadamente por la configuración del addon, el estado de grupo y el comportamiento del chat de ESO. EZOAlerts no intenta saltarse las restricciones de input o chat de ESO.
 
@@ -145,6 +151,7 @@ Los avisos al chat de grupo están limitados intencionadamente por la configurac
 - Cambiar idioma entre automático, inglés y español.
 - Usar el aviso de prueba en pantalla.
 - Usar el mensaje de grupo de prueba estando en grupo.
+- En un grupo con transporte EZOCore compatible, abrir un cofre o saco pesado y confirmar que los clientes compatibles muestran el aviso temporal HUD cuando el productor correspondiente y los avisos en pantalla están activos.
 - Confirmar que los mensajes de cofres y sacos pesados no se activan fuera de grupo.
 - Confirmar que los avisos de guild compartida son solo locales.
 - Confirmar que los avisos de zona del líder no viajan automáticamente.

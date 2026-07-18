@@ -110,15 +110,26 @@ local function FormatText(stringId, fallback, values)
     return ReplaceParams(text, values)
 end
 
+local function FormatUnitName(name)
+    name = tostring(name or "")
+    if name ~= "" and type(zo_strformat) == "function" and SI_UNIT_NAME ~= nil then
+        return zo_strformat(SI_UNIT_NAME, name)
+    end
+    return name
+end
+
 local function GetPlayerName()
     local name = nil
-    if type(GetUnitName) == "function" then
+    if type(GetRawUnitName) == "function" then
+        name = GetRawUnitName("player")
+    end
+    if (not name or name == "") and type(GetUnitName) == "function" then
         name = GetUnitName("player")
     end
     if (not name or name == "") and type(GetDisplayName) == "function" then
         name = GetDisplayName()
     end
-    return tostring(name or "")
+    return FormatUnitName(name)
 end
 
 local function GetTargetName(context)
@@ -241,6 +252,9 @@ local function TriggerHeavySackAlert(target)
     }
     if EZOAlerts.TriggerAlert then
         EZOAlerts.TriggerAlert(ALERT_ID, context)
+    end
+    if EZOAlerts_GroupEvents and EZOAlerts_GroupEvents.Publish then
+        EZOAlerts_GroupEvents.Publish("heavySack", context.playerName, "unknown")
     end
     if EZOAlerts_Log and EZOAlerts_Log.Record then
         EZOAlerts_Log.Record(GetText(_G.EZOA_LOG_CATEGORY_HEAVY_SACKS, "Heavy sacks"), FormatText(_G.EZOA_ALERT_HEAVY_SACK_GROUP, "<<1>> opened a heavy sack.", {

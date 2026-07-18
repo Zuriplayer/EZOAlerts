@@ -72,11 +72,25 @@ local function IsSelf(unitTag)
     return false
 end
 
+local function FormatUnitName(name)
+    name = tostring(name or "")
+    if name ~= "" and type(zo_strformat) == "function" and SI_UNIT_NAME ~= nil then
+        return zo_strformat(SI_UNIT_NAME, name)
+    end
+    return name
+end
+
 local function GetName(unitTag)
+    if type(GetRawUnitName) == "function" then
+        local name = GetRawUnitName(unitTag)
+        if name and name ~= "" then
+            return FormatUnitName(name)
+        end
+    end
     if type(GetUnitName) == "function" then
         local name = GetUnitName(unitTag)
         if name and name ~= "" then
-            return name
+            return FormatUnitName(name)
         end
     end
     if type(GetUnitDisplayName) == "function" then

@@ -55,6 +55,14 @@ local function JoinNames(names)
     return table.concat(names, ", ")
 end
 
+local function FormatUnitName(name)
+    name = tostring(name or "")
+    if name ~= "" and type(zo_strformat) == "function" and SI_UNIT_NAME ~= nil then
+        return zo_strformat(SI_UNIT_NAME, name)
+    end
+    return name
+end
+
 local function GetGuildNameSafe(guildId)
     if type(GetGuildName) ~= "function" then
         return tostring(guildId or "")
@@ -97,12 +105,15 @@ local function GetMemberName(unitTag)
     if type(GetUnitDisplayName) == "function" then
         displayName = tostring(GetUnitDisplayName(unitTag) or "")
     end
+    if type(GetRawUnitName) == "function" then
+        characterName = tostring(GetRawUnitName(unitTag) or "")
+    end
     if type(GetUnitName) == "function" then
-        characterName = tostring(GetUnitName(unitTag) or "")
+        characterName = characterName ~= "" and characterName or tostring(GetUnitName(unitTag) or "")
     end
 
     if characterName ~= "" then
-        return characterName
+        return FormatUnitName(characterName)
     end
     return displayName
 end

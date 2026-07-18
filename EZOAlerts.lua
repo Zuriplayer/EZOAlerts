@@ -117,11 +117,13 @@ function EZOA.RegisterWithEZOCore()
             id = "ezoalerts",
             name = EZOA.ADDON_NAME or ADDON_NAME,
             version = EZOA.ADDON_VERSION or "0.0.0",
-            addOnVersion = 10022,
+            addOnVersion = 10024,
             apiVersion = 1,
             capabilities = {
                 "alerts.screen",
                 "alerts.groupChat",
+                "alerts.groupEvent.provider",
+                "alerts.groupEvent.consumer",
                 "family.debug.controller",
                 "family.layout.consumer",
                 "family.language.consumer",
@@ -231,6 +233,10 @@ function EZOA:Initialize()
 
     if EZOAlerts_Channels and EZOAlerts_Channels.Init then
         EZOAlerts_Channels.Init()
+    end
+
+    if EZOAlerts_GroupEvents and EZOAlerts_GroupEvents.Init then
+        EZOAlerts_GroupEvents.Init()
     end
 
     if EZOAlerts_Producers and EZOAlerts_Producers.Init then

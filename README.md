@@ -15,8 +15,8 @@ The addon currently focuses on group and role-awareness alerts. It does not repl
 
 ## Version Metadata
 
-- Addon version: `0.1.22`
-- AddOnVersion: `10022`
+- Addon version: `0.1.24`
+- AddOnVersion: `10024`
 - APIVersion: `101049 101050`
 - Status: public beta
 
@@ -25,6 +25,7 @@ The addon currently focuses on group and role-awareness alerts. It does not repl
 - The Elder Scrolls Online.
 - LibAddonMenu-2.0.
 - Optional: EZOCore for the central `Settings > EZO` configuration.
+- Optional: LibGroupBroadcast through EZOCore for shared group screen alerts.
 - Optional: LibChatMessage for cleaner local addon messages.
 - Optional: LibDebugLogger and DebugLogViewer for the combat log output.
 
@@ -55,18 +56,21 @@ The addon currently focuses on group and role-awareness alerts. It does not repl
 
 - Chest alerts:
   - Detects chest opening through lockpick and loot events.
-  - Reports the player and detected lock quality.
+  - Reports the character name and detected lock quality.
   - Only generates messages while grouped.
+  - Can appear as a temporary local HUD alert for compatible grouped players who have EZOCore, LibGroupBroadcast and EZOAlerts loaded.
   - Configurable enable toggle, group-chat toggle and cooldown.
 
 - Heavy sack alerts:
   - Detects heavy sacks through loot target information.
+  - Reports the character name when ESO provides it.
   - Only generates messages while grouped.
+  - Can appear as a temporary local HUD alert for compatible grouped players who have EZOCore, LibGroupBroadcast and EZOAlerts loaded.
   - Configurable enable toggle, group-chat toggle and cooldown.
 
 - Shared-guild alerts:
   - Scans group members against your five ESO guilds.
-  - Shows a local-only message listing the guilds shared with each detected group member.
+  - Shows a local-only message listing the guilds shared with each detected group member, using character names when ESO provides them.
   - Can suppress detection when the group leader shares a guild with you, to reduce noise during guild events.
 
 - Group leader zone alert:
@@ -132,6 +136,8 @@ Configuration sections use EZO-style informational headers with a purple help ic
 - No custom keybindings.
 - No replacement of ESO action bars, group frames or menus.
 - No Discord publishing or external workflow execution from the addon.
+- Shared group screen alerts require EZOCore, LibGroupBroadcast transport and EZOAlerts on the receiving client.
+- Received chest and heavy-sack screen alerts respect the receiving client's matching producer toggle and global on-screen alert channel.
 
 Group-chat alerts are intentionally constrained by addon settings, group state and ESO chat behavior. EZOAlerts does not attempt to bypass ESO input or chat restrictions.
 
@@ -145,6 +151,7 @@ Group-chat alerts are intentionally constrained by addon settings, group state a
 - Switch language between automatic, English and Spanish.
 - Use the test screen alert.
 - Use the test group message while grouped.
+- In a group with compatible EZOCore transport, open a chest or heavy sack and confirm compatible clients show the temporary HUD alert when the matching producer and on-screen alerts are enabled.
 - Confirm chest and heavy sack messages do not trigger outside a group.
 - Confirm shared-guild alerts are local-only.
 - Confirm leader-zone alerts do not travel automatically.

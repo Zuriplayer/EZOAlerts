@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.24 - Shared group screen alerts
+
+- Publishes chest and heavy-sack events through EZOCore group presence when available.
+- Shows received chest and heavy-sack events in the local EZOAlerts HUD window when on-screen alerts are enabled.
+
+## 0.1.23 - Character names in alerts
+
+- Uses character names first for generated alert messages, falling back to account names only when ESO does not provide a character name.
+
 ## 0.1.22 - Shared diagnostics control
 
 - Registers the optional event-log mode with EZOCore so the family-wide action can disable it.
