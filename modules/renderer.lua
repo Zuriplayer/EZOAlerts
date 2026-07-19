@@ -590,7 +590,7 @@ function MOD.Show(text, kind, options)
         return false
     end
 
-    local control = EnsureControl()
+    EnsureControl()
     ApplyPlacement()
 
     kind = tostring(kind or "info")

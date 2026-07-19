@@ -21,9 +21,7 @@ function MOD.Send(text, options)
         return false
     end
 
-    if options and options.requireGroup == false then
-        -- Deja una puerta clara para pruebas locales o casos muy concretos.
-    elseif not CanSendToGroup() then
+    if not (options and options.requireGroup == false) and not CanSendToGroup() then
         return false
     end
 
