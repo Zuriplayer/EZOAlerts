@@ -15,8 +15,8 @@ The addon currently focuses on group and role-awareness alerts. It does not repl
 
 ## Version Metadata
 
-- Addon version: `0.1.24`
-- AddOnVersion: `10024`
+- Addon version: `0.1.25`
+- AddOnVersion: `10025`
 - APIVersion: `101049 101050`
 - Status: public beta
 
@@ -44,10 +44,9 @@ The addon currently focuses on group and role-awareness alerts. It does not repl
 - Shared on-screen alert window:
   - HUD/HUD UI-only visibility.
   - Info, warning and error styles.
-  - Movable preview from the configuration panel or EZOCore shared layout mode.
-  - Left-mouse-button dragging while move mode is active.
+  - One-drag positioning action from the configuration panel, using the same visual sample as the test alert, plus the EZOCore shared layout mode when available.
+  - Left-mouse-button dragging, including while in combat.
   - Scale, anchor and temporary-alert duration settings.
-  - Keyboard/gamepad prompt text for alert actions when ESO exposes the input mode.
 
 - Controlled group-chat channel:
   - Global group-chat toggle.
@@ -85,7 +84,9 @@ The addon currently focuses on group and role-awareness alerts. It does not repl
   - DD alarms/warnings check for clearly support-looking weapons or taunt signals.
   - Can show alarms only, alarms plus warnings, or be disabled.
   - Can be limited to grouped play.
+  - Can hide an existing persistent alert when combat starts.
   - Can be muted in settings or silenced for the current session from the alert window.
+  - Persistent alert actions use the alert-window buttons; no keybinds or input interception are registered.
   - Does not use set detection.
 
 - Localization:
@@ -114,17 +115,22 @@ Configuration sections use EZO-style informational headers with a purple help ic
   - Temporary alert duration in seconds.
   - Alert scale.
   - Screen position anchor.
-  - Move alert window.
-  - Show test alert.
+  - One-drag alert-window positioning action using the test-alert visual.
+  - Show test alert without moving the window.
   - Send test group message.
 
-- Generated alerts:
+- Treasure alerts:
   - Chest alerts, group-chat output and cooldown.
   - Heavy sack alerts, group-chat output and cooldown.
+
+- Group awareness:
   - Shared-guild group member detection.
   - Suppress shared-guild detection if the leader shares a guild with you.
   - Leader zone/instance alert, same-zone ignore and cooldown.
+
+- Role alerts:
   - Role check mode, mute, grouped-only setting and cooldown.
+  - Visibility of an existing persistent role alert during combat.
 
 ## Safety Boundaries
 
@@ -150,6 +156,7 @@ Group-chat alerts are intentionally constrained by addon settings, group state a
 - With EZOCore disabled, confirm the standalone LibAddonMenu panel is available.
 - Switch language between automatic, English and Spanish.
 - Use the test screen alert.
+- Use the one-drag positioning action and confirm it shows the same visual sample as the test alert, stays visible while positioning and hides after releasing the drag.
 - Use the test group message while grouped.
 - In a group with compatible EZOCore transport, open a chest or heavy sack and confirm compatible clients show the temporary HUD alert when the matching producer and on-screen alerts are enabled.
 - Confirm chest and heavy sack messages do not trigger outside a group.
@@ -157,7 +164,6 @@ Group-chat alerts are intentionally constrained by addon settings, group state a
 - Confirm leader-zone alerts do not travel automatically.
 - Test role-check alerts with tank, healer and DD roles.
 - Test acknowledge and session mute on the role alert window.
-- Test keyboard/mouse and gamepad mode prompt text.
 - Confirm the alert window appears only in normal HUD/HUD UI scenes.
 - Confirm move preview does not remain active after `/reloadui`.
 

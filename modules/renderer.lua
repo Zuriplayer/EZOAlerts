@@ -60,7 +60,7 @@ local function GetKeyText(keyCode, fallback)
     return fallback
 end
 
-local function GetActionHint(action, index)
+local function GetActionHint(action)
     if type(action) ~= "table" then
         return nil
     end
@@ -74,7 +74,7 @@ local function GetActionHint(action, index)
     end
 
     if fallback == nil then
-        fallback = useGamepad and (index == 1 and "A" or "X") or (index == 1 and "E" or "X")
+        return nil
     end
 
     local hint = tostring(GetKeyText(keyCode, fallback) or "")
@@ -244,7 +244,7 @@ local function ApplyMoveState()
         return
     end
 
-    local canMove = MOD.moveMode == true and CanShowWindow() and not IsInCombat()
+    local canMove = MOD.moveMode == true and CanShowWindow()
     MOD.canMove = canMove
     if MOD.dragActive and not canMove then
         control:StopMovingOrResizing()
@@ -319,7 +319,7 @@ local function ApplyActionButtons(actions)
             local width = isPrimary and 222 or 210
             local height = 34
             local x = (index == 1) and -120 or 116
-            local hint = GetActionHint(action, index) or ""
+            local hint = GetActionHint(action) or ""
             button:ClearAnchors()
             button:SetAnchor(BOTTOM, control, BOTTOM, x, -12)
             button:SetDimensions(width, height)
@@ -347,10 +347,17 @@ local function ApplyActionButtons(actions)
             button.keyLabel:SetAnchorFill(button.keyBackdrop)
             button.keyLabel:SetDimensions(34, 22)
             button.keyLabel:SetText(hint)
+            button.keyBackdrop:SetHidden(hint == "")
+            button.keyLabel:SetHidden(hint == "")
 
             button.textLabel:ClearAnchors()
-            button.textLabel:SetAnchor(LEFT, button.keyLabel, RIGHT, 8, 0)
-            button.textLabel:SetDimensions(width - 54, height)
+            if hint ~= "" then
+                button.textLabel:SetAnchor(LEFT, button.keyLabel, RIGHT, 8, 0)
+                button.textLabel:SetDimensions(width - 54, height)
+            else
+                button.textLabel:SetAnchor(LEFT, button, LEFT, 14, 0)
+                button.textLabel:SetDimensions(width - 28, height)
+            end
             button.textLabel:SetText(tostring(action.text or "OK"))
 
             button:SetHandler("OnClicked", function()
@@ -407,6 +414,9 @@ local function EnsureControl()
         MOD.dragActive = false
         control:SetMovable(false)
         SaveCurrentPosition()
+        if MOD.temporaryMove == true then
+            MOD.SetMoveMode(false)
+        end
     end)
 
     local backdrop = wm:CreateControl(CONTROL_NAME .. "Backdrop", control, CT_BACKDROP)
@@ -461,6 +471,7 @@ end
 
 function MOD.Init()
     MOD.moveMode = false
+    MOD.temporaryMove = false
     MOD.inCombat = false
     EnsureControl()
     ApplyPlacement()
@@ -537,6 +548,9 @@ end
 
 function MOD.SetMoveMode(enabled)
     MOD.moveMode = enabled == true
+    if not MOD.moveMode then
+        MOD.temporaryMove = false
+    end
     EnsureControl()
     ApplyPlacement()
 
@@ -546,7 +560,8 @@ function MOD.SetMoveMode(enabled)
         MOD.hasTitle = false
         ApplyActionButtons(nil)
         local style = ApplyStyle(EZOAlerts.ALERT_KIND_INFO)
-        MOD.label:SetText(GetString(EZOA_ALERT_MOVE_PREVIEW))
+        local previewStringId = MOD.temporaryMove and EZOA_TEST_ALERT_TEXT or EZOA_ALERT_MOVE_PREVIEW
+        MOD.label:SetText(GetString(previewStringId))
         MOD.label:SetColor(style.body[1], style.body[2], style.body[3], style.body[4])
         MOD.isShowing = true
         MOD.isPreview = true
@@ -556,6 +571,11 @@ function MOD.SetMoveMode(enabled)
     end
 
     MOD.RefreshVisibility()
+end
+
+function MOD.StartTemporaryMove()
+    MOD.temporaryMove = true
+    MOD.SetMoveMode(true)
 end
 
 function MOD.IsMoveMode()

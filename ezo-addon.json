@@ -3,7 +3,7 @@
   "addon": {
     "id": "ezoalerts",
     "name": "EZOAlerts",
-    "version": "0.1.24",
+    "version": "0.1.25",
     "stage": "beta",
     "status": "beta",
     "phase": "public-beta",
@@ -11,7 +11,7 @@
     "manifest": "EZOAlerts.txt",
     "package": {
       "rootFolderName": "EZOAlerts",
-      "zipName": "EZOAlerts_v0.1.24.zip",
+      "zipName": "EZOAlerts_v0.1.25.zip",
       "outputPath": "dist",
       "include": [
         "*.txt",

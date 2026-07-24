@@ -3,6 +3,9 @@
 ## Unreleased
 
 - Allows the shared EZOCore layout move-all mode to keep the alert preview movable while the player is in combat.
+- Reorganizes LAM into output, treasure, group-awareness and role-alert sections with disabled dependent controls.
+- Replaces the local move checkbox with a one-drag positioning action that uses the test-alert visual, and makes the role alert combat visibility configurable.
+- Removes non-functional keyboard and gamepad prompts from persistent role-alert actions.
 
 ## 0.1.24 - Shared group screen alerts
 

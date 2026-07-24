@@ -15,8 +15,8 @@ El addon se centra actualmente en avisos de grupo y coherencia de rol. No sustit
 
 ## Metadatos de versión
 
-- Versión del addon: `0.1.24`
-- AddOnVersion: `10024`
+- Versión del addon: `0.1.25`
+- AddOnVersion: `10025`
 - APIVersion: `101049 101050`
 - Estado: beta pública
 
@@ -44,10 +44,9 @@ El addon se centra actualmente en avisos de grupo y coherencia de rol. No sustit
 - Ventana compartida de avisos en pantalla:
   - Visibilidad solo en HUD/HUD UI.
   - Estilos de información, warning y error.
-  - Previsualización movible desde el panel de configuración o el modo compartido de disposición de EZOCore.
-  - Arrastre con botón izquierdo mientras el modo mover está activo.
+  - Acción de posicionamiento de un solo arrastre desde el panel de configuración, usando la misma muestra visual que el aviso de prueba, además del modo compartido de disposición de EZOCore cuando está disponible.
+  - Arrastre con botón izquierdo, incluso durante combate.
   - Ajustes de escala, ancla de posición y duración de avisos temporales.
-  - Texto de acción para teclado/gamepad cuando ESO expone el modo de entrada.
 
 - Canal controlado de chat de grupo:
   - Selector global para chat de grupo.
@@ -85,7 +84,9 @@ El addon se centra actualmente en avisos de grupo y coherencia de rol. No sustit
   - Las alarmas/warnings de DD comprueban armas claramente de soporte o señales de taunt.
   - Puede mostrar solo alarmas, alarmas y warnings, o desactivarse.
   - Puede limitarse a juego en grupo.
+  - Puede ocultar un aviso persistente ya mostrado al entrar en combate.
   - Puede silenciarse en configuración o durante la sesión desde la ventana de aviso.
+  - Las acciones persistentes usan los botones de la ventana de aviso; no registra atajos ni intercepta input.
   - No usa detección de sets.
 
 - Localización:
@@ -114,17 +115,22 @@ Las secciones de configuración usan cabeceras informativas de estilo EZO con un
   - Duración de avisos temporales en segundos.
   - Escala del aviso.
   - Ancla de posición en pantalla.
-  - Mover ventana de avisos.
-  - Mostrar aviso de prueba.
+  - Acción de posicionamiento de la ventana para un solo arrastre usando la visual del aviso de prueba.
+  - Mostrar aviso de prueba sin mover la ventana.
   - Enviar mensaje de grupo de prueba.
 
-- Avisos generados:
+- Avisos de tesoros:
   - Avisos de cofres, salida al chat de grupo y tiempo de espera.
   - Avisos de sacos pesados, salida al chat de grupo y tiempo de espera.
+
+- Estado del grupo:
   - Detección de miembros de grupo con guild compartida.
   - Supresión de detección de guild compartida si el líder comparte guild contigo.
   - Aviso de zona/instancia del líder, ignorar misma zona y tiempo de espera.
+
+- Avisos de rol:
   - Modo de comprobación de rol, silenciar, solo en grupo y tiempo de espera.
+  - Visibilidad en combate de un aviso de rol persistente ya mostrado.
 
 ## Límites de Seguridad
 
@@ -150,6 +156,7 @@ Los avisos al chat de grupo están limitados intencionadamente por la configurac
 - Con EZOCore desactivado, confirmar que está disponible el panel independiente de LibAddonMenu.
 - Cambiar idioma entre automático, inglés y español.
 - Usar el aviso de prueba en pantalla.
+- Usar la acción de posicionamiento de un solo arrastre y confirmar que muestra la misma muestra visual que el aviso de prueba, permanece visible mientras se posiciona y se oculta al soltar el arrastre.
 - Usar el mensaje de grupo de prueba estando en grupo.
 - En un grupo con transporte EZOCore compatible, abrir un cofre o saco pesado y confirmar que los clientes compatibles muestran el aviso temporal HUD cuando el productor correspondiente y los avisos en pantalla están activos.
 - Confirmar que los mensajes de cofres y sacos pesados no se activan fuera de grupo.
@@ -157,7 +164,6 @@ Los avisos al chat de grupo están limitados intencionadamente por la configurac
 - Confirmar que los avisos de zona del líder no viajan automáticamente.
 - Probar la comprobación de rol con rol tanque, healer y DD.
 - Probar confirmar recibido y silenciar sesión en la ventana de rol.
-- Probar el texto de acción en teclado/ratón y modo gamepad.
 - Confirmar que la ventana de avisos aparece solo en escenas normales HUD/HUD UI.
 - Confirmar que la previsualización de mover ventana no queda activa tras `/reloadui`.
 

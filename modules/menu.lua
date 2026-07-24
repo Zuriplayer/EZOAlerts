@@ -95,8 +95,19 @@ local function GetRoleCheckSettings()
     if settings.mode == nil then settings.mode = "alarms" end
     if settings.muted == nil then settings.muted = false end
     if settings.onlyGrouped == nil then settings.onlyGrouped = true end
+    if settings.hideInCombat == nil then settings.hideInCombat = true end
     if settings.minIntervalMs == nil then settings.minIntervalMs = 60000 end
     return settings
+end
+
+local function IsGrouped()
+    if type(IsUnitGrouped) == "function" and IsUnitGrouped("player") then
+        return true
+    end
+    if type(GetGroupSize) == "function" and (tonumber(GetGroupSize()) or 0) > 1 then
+        return true
+    end
+    return false
 end
 
 local function GetOptions()
@@ -219,21 +230,14 @@ local function GetOptions()
             width   = "half",
         },
         {
-            type    = "checkbox",
+            type    = "button",
             name    = GetString(EZOA_OPTION_MOVE_WINDOW),
             tooltip = GetString(EZOA_OPTION_MOVE_WINDOW_TOOLTIP),
-            getFunc = function()
-                return EZOAlerts_Renderer and EZOAlerts_Renderer.IsMoveMode and EZOAlerts_Renderer.IsMoveMode() or false
-            end,
-            setFunc = function(value)
-                if EZOAlerts_Renderer and EZOAlerts_Renderer.SetMoveMode then
-                    EZOAlerts_Renderer.SetMoveMode(value == true)
-                end
-                if value == true and EZOAlerts and EZOAlerts.Print then
-                    EZOAlerts.Print(GetString(EZOA_MSG_MOVE_WINDOW_HINT))
+            func    = function()
+                if EZOAlerts_Renderer and EZOAlerts_Renderer.StartTemporaryMove then
+                    EZOAlerts_Renderer.StartTemporaryMove()
                 end
             end,
-            default = false,
             width   = "full",
         },
         {
@@ -245,6 +249,7 @@ local function GetOptions()
                     EZOAlerts.ShowAlert(GetString(EZOA_TEST_ALERT_TEXT), EZOAlerts.ALERT_KIND_INFO)
                 end
             end,
+            disabled = function() return EZOA.sv.channels.screen ~= true end,
             width   = "full",
         },
         {
@@ -256,10 +261,13 @@ local function GetOptions()
                     EZOAlerts.SendGroupAlert(GetString(EZOA_TEST_GROUP_CHAT_TEXT))
                 end
             end,
+            disabled = function()
+                return EZOA.sv.channels.groupChat ~= true or not IsGrouped()
+            end,
             width   = "full",
         },
 
-        CreateInfoHeader(GetString(EZOA_OPTION_GENERATED_ALERTS), GetString(EZOA_OPTION_GENERATED_ALERTS_TOOLTIP)),
+        CreateInfoHeader(GetString(EZOA_OPTION_TREASURE_ALERTS), GetString(EZOA_OPTION_TREASURE_ALERTS_TOOLTIP)),
         {
             type    = "checkbox",
             name    = GetString(EZOA_OPTION_CHESTS_ENABLED),
@@ -275,6 +283,7 @@ local function GetOptions()
             tooltip = GetString(EZOA_OPTION_CHESTS_GROUP_CHAT_TOOLTIP),
             getFunc = function() return GetChestSettings().groupChat == true end,
             setFunc = function(value) GetChestSettings().groupChat = value == true end,
+            disabled = function() return GetChestSettings().enabled == false end,
             default = true,
             width   = "full",
         },
@@ -287,6 +296,7 @@ local function GetOptions()
             step     = 5,
             getFunc  = function() return MsToSeconds(GetChestSettings().minIntervalMs, 15000) end,
             setFunc  = function(value) GetChestSettings().minIntervalMs = SecondsToMs(value, 15) end,
+            disabled = function() return GetChestSettings().enabled == false end,
             default  = 15,
             width    = "half",
         },
@@ -305,6 +315,7 @@ local function GetOptions()
             tooltip = GetString(EZOA_OPTION_HEAVY_SACKS_GROUP_CHAT_TOOLTIP),
             getFunc = function() return GetHeavySackSettings().groupChat == true end,
             setFunc = function(value) GetHeavySackSettings().groupChat = value == true end,
+            disabled = function() return GetHeavySackSettings().enabled == false end,
             default = true,
             width   = "full",
         },
@@ -317,9 +328,12 @@ local function GetOptions()
             step     = 5,
             getFunc  = function() return MsToSeconds(GetHeavySackSettings().minIntervalMs, 15000) end,
             setFunc  = function(value) GetHeavySackSettings().minIntervalMs = SecondsToMs(value, 15) end,
+            disabled = function() return GetHeavySackSettings().enabled == false end,
             default  = 15,
             width    = "half",
         },
+
+        CreateInfoHeader(GetString(EZOA_OPTION_GROUP_AWARENESS), GetString(EZOA_OPTION_GROUP_AWARENESS_TOOLTIP)),
         {
             type    = "checkbox",
             name    = GetString(EZOA_OPTION_GROUP_GUILDS_ENABLED),
@@ -345,6 +359,7 @@ local function GetOptions()
                     EZOAlerts_ProducerGroupGuilds.ResetSession()
                 end
             end,
+            disabled = function() return GetGroupGuildSettings().enabled == false end,
             default = true,
             width   = "full",
         },
@@ -374,6 +389,7 @@ local function GetOptions()
             tooltip = GetString(EZOA_OPTION_GROUP_LEADER_ZONE_IGNORE_SAME_TOOLTIP),
             getFunc = function() return GetGroupLeaderZoneSettings().ignoreIfPlayerInSameZone == true end,
             setFunc = function(value) GetGroupLeaderZoneSettings().ignoreIfPlayerInSameZone = value == true end,
+            disabled = function() return GetGroupLeaderZoneSettings().enabled == false end,
             default = true,
             width   = "full",
         },
@@ -386,9 +402,12 @@ local function GetOptions()
             step     = 5,
             getFunc  = function() return MsToSeconds(GetGroupLeaderZoneSettings().minIntervalMs, 10000) end,
             setFunc  = function(value) GetGroupLeaderZoneSettings().minIntervalMs = SecondsToMs(value, 10) end,
+            disabled = function() return GetGroupLeaderZoneSettings().enabled == false end,
             default  = 10,
             width    = "half",
         },
+
+        CreateInfoHeader(GetString(EZOA_OPTION_ROLE_ALERTS), GetString(EZOA_OPTION_ROLE_ALERTS_TOOLTIP)),
         {
             type          = "dropdown",
             name          = GetString(EZOA_OPTION_ROLE_CHECK_MODE),
@@ -426,6 +445,7 @@ local function GetOptions()
                     EZOAlerts_ProducerRoleCheck.QueueScan()
                 end
             end,
+            disabled = function() return GetRoleCheckSettings().mode == "disabled" end,
             default = false,
             width   = "full",
         },
@@ -440,6 +460,17 @@ local function GetOptions()
                     EZOAlerts_ProducerRoleCheck.QueueScan()
                 end
             end,
+            disabled = function() return GetRoleCheckSettings().mode == "disabled" end,
+            default = true,
+            width   = "full",
+        },
+        {
+            type    = "checkbox",
+            name    = GetString(EZOA_OPTION_ROLE_CHECK_HIDE_IN_COMBAT),
+            tooltip = GetString(EZOA_OPTION_ROLE_CHECK_HIDE_IN_COMBAT_TOOLTIP),
+            getFunc = function() return GetRoleCheckSettings().hideInCombat == true end,
+            setFunc = function(value) GetRoleCheckSettings().hideInCombat = value == true end,
+            disabled = function() return GetRoleCheckSettings().mode == "disabled" end,
             default = true,
             width   = "full",
         },
@@ -452,6 +483,7 @@ local function GetOptions()
             step     = 15,
             getFunc  = function() return MsToSeconds(GetRoleCheckSettings().minIntervalMs, 60000) end,
             setFunc  = function(value) GetRoleCheckSettings().minIntervalMs = SecondsToMs(value, 60) end,
+            disabled = function() return GetRoleCheckSettings().mode == "disabled" end,
             default  = 60,
             width    = "half",
         },

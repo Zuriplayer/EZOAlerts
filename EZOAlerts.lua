@@ -185,8 +185,8 @@ function EZOA.RegisterLayoutWithEZOCore()
             id = "ezoalerts.alert",
             addonId = "ezoalerts",
             addonName = "EZOAlerts",
-            name = function() return GetString(EZOA_OPTION_MOVE_WINDOW) end,
-            tooltip = function() return GetString(EZOA_OPTION_MOVE_WINDOW_TOOLTIP) end,
+            name = function() return GetString(EZOA_OPTION_LAYOUT_ALERT_WINDOW) end,
+            tooltip = function() return GetString(EZOA_OPTION_LAYOUT_ALERT_WINDOW_TOOLTIP) end,
             setEditMode = function(enabled)
                 EZOAlerts_Renderer.SetMoveMode(enabled)
                 return EZOAlerts_Renderer.IsMoveMode() == (enabled == true)

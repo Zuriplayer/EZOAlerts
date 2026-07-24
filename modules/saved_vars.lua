@@ -97,6 +97,7 @@ function MOD.GetDefaults()
                 mode = "alarms",
                 muted = false,
                 onlyGrouped = true,
+                hideInCombat = true,
                 minIntervalMs = 60000,
             },
         },

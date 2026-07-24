@@ -16,6 +16,7 @@ local LEVEL_WARNING = "warning"
 
 local DEFAULT_SETTINGS = {
     mode = MODE_ALARMS,
+    hideInCombat = true,
     onlyGrouped = true,
     minIntervalMs = DEFAULT_INTERVAL_MS,
 }
@@ -100,6 +101,7 @@ local function GetSettings()
     if settings.mode == nil then settings.mode = DEFAULT_SETTINGS.mode end
     if settings.muted == nil then settings.muted = false end
     if settings.onlyGrouped == nil then settings.onlyGrouped = DEFAULT_SETTINGS.onlyGrouped end
+    if settings.hideInCombat == nil then settings.hideInCombat = DEFAULT_SETTINGS.hideInCombat end
     if settings.minIntervalMs == nil then settings.minIntervalMs = DEFAULT_SETTINGS.minIntervalMs end
     return settings
 end
@@ -371,19 +373,16 @@ local function RegisterAlert()
             return context and context.message or ""
         end,
         options = function(context)
+            local settings = GetSettings()
             return {
                 title = context and context.title,
                 body = context and context.message,
                 durationMs = 0,
-                hideInCombat = true,
+                hideInCombat = settings.hideInCombat == true,
                 key = "role_check",
                 actions = {
                     {
                         text = GetString(EZOA_ALERT_ACTION_ACKNOWLEDGE),
-                        keyboardHint = "E",
-                        gamepadHint = "A",
-                        keyboardKey = _G.KEY_E,
-                        gamepadKey = _G.KEY_GAMEPAD_BUTTON_1,
                         primary = true,
                         callback = function()
                             MOD.AcknowledgeSession(context and context.issueKey)
@@ -391,10 +390,6 @@ local function RegisterAlert()
                     },
                     {
                         text = GetString(EZOA_ALERT_ACTION_MUTE_SESSION),
-                        keyboardHint = "X",
-                        gamepadHint = "X",
-                        keyboardKey = _G.KEY_X,
-                        gamepadKey = _G.KEY_GAMEPAD_BUTTON_3,
                         callback = function()
                             MOD.MuteSession()
                         end,
