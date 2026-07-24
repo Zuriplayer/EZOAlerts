@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Allows the shared EZOCore layout move-all mode to keep the alert preview movable while the player is in combat.
+
 ## 0.1.24 - Shared group screen alerts
 
 - Publishes chest and heavy-sack events through EZOCore group presence when available.

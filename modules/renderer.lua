@@ -470,8 +470,7 @@ function MOD.Init()
         EVENT_MANAGER:RegisterForEvent(EVENT_NAMESPACE, EVENT_PLAYER_COMBAT_STATE, function(_, inCombat)
             MOD.inCombat = inCombat == true
             if MOD.inCombat then
-                MOD.SetMoveMode(false)
-                if MOD.isPreview == true or MOD.hideInCombat == true then
+                if MOD.moveMode ~= true and (MOD.isPreview == true or MOD.hideInCombat == true) then
                     MOD.Hide()
                 else
                     MOD.RefreshVisibility()
@@ -519,7 +518,7 @@ function MOD.RefreshVisibility()
         return
     end
 
-    if IsInCombat() and (MOD.isPreview == true or MOD.hideInCombat == true) then
+    if IsInCombat() and MOD.moveMode ~= true and (MOD.isPreview == true or MOD.hideInCombat == true) then
         MOD.control:SetHidden(true)
         ApplyMoveState()
         return
@@ -537,7 +536,7 @@ function MOD.RefreshActionHints()
 end
 
 function MOD.SetMoveMode(enabled)
-    MOD.moveMode = enabled == true and not IsInCombat()
+    MOD.moveMode = enabled == true
     EnsureControl()
     ApplyPlacement()
 

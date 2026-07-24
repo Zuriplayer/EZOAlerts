@@ -194,9 +194,6 @@ function EZOA.RegisterLayoutWithEZOCore()
             isEditMode = function()
                 return EZOAlerts_Renderer.IsMoveMode()
             end,
-            canEdit = function()
-                return type(IsUnitInCombat) ~= "function" or not IsUnitInCombat("player")
-            end,
         })
     end)
 
