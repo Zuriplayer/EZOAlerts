@@ -15,8 +15,8 @@ El addon se centra actualmente en avisos de grupo y coherencia de rol. No sustit
 
 ## Metadatos de versión
 
-- Versión del addon: `0.1.25`
-- AddOnVersion: `10025`
+- Versión del addon: `0.1.26`
+- AddOnVersion: `10026`
 - APIVersion: `101049 101050`
 - Estado: beta pública
 
@@ -116,7 +116,7 @@ Las secciones de configuración usan cabeceras informativas de estilo EZO con un
   - Escala del aviso.
   - Ancla de posición en pantalla.
   - Acción de posicionamiento de la ventana para un solo arrastre usando la visual del aviso de prueba.
-  - Mostrar aviso de prueba sin mover la ventana.
+  - Mostrar aviso de prueba sin mover la ventana; lanzado desde Ajustes, aparece al volver al HUD.
   - Enviar mensaje de grupo de prueba.
 
 - Avisos de tesoros:
@@ -155,7 +155,7 @@ Los avisos al chat de grupo están limitados intencionadamente por la configurac
 - Si los controles de debug de EZOCore están disponibles, confirmar que la acción compartida puede desactivar el `Log` de EZOAlerts.
 - Con EZOCore desactivado, confirmar que está disponible el panel independiente de LibAddonMenu.
 - Cambiar idioma entre automático, inglés y español.
-- Usar el aviso de prueba en pantalla.
+- Usar el aviso de prueba en pantalla, cerrando Ajustes después de pulsar el botón para que pueda aparecer la ventana solo-HUD.
 - Usar la acción de posicionamiento de un solo arrastre y confirmar que muestra la misma muestra visual que el aviso de prueba, permanece visible mientras se posiciona y se oculta al soltar el arrastre.
 - Usar el mensaje de grupo de prueba estando en grupo.
 - En un grupo con transporte EZOCore compatible, abrir un cofre o saco pesado y confirmar que los clientes compatibles muestran el aviso temporal HUD cuando el productor correspondiente y los avisos en pantalla están activos.

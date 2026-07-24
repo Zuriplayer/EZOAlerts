@@ -245,7 +245,9 @@ local function GetOptions()
             name    = GetString(EZOA_OPTION_TEST_ALERT),
             tooltip = GetString(EZOA_OPTION_TEST_ALERT_TOOLTIP),
             func    = function()
-                if EZOAlerts.ShowAlert then
+                if EZOAlerts_Renderer and EZOAlerts_Renderer.ShowWhenHud then
+                    EZOAlerts_Renderer.ShowWhenHud(GetString(EZOA_TEST_ALERT_TEXT), EZOAlerts.ALERT_KIND_INFO)
+                elseif EZOAlerts.ShowAlert then
                     EZOAlerts.ShowAlert(GetString(EZOA_TEST_ALERT_TEXT), EZOAlerts.ALERT_KIND_INFO)
                 end
             end,

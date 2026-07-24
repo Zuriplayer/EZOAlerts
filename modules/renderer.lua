@@ -195,6 +195,11 @@ local function RegisterSceneFragments(control)
 
     if SCENE_MANAGER and type(SCENE_MANAGER.RegisterCallback) == "function" then
         SCENE_MANAGER:RegisterCallback("SceneStateChanged", function()
+            if EZOAlerts_Renderer and EZOAlerts_Renderer.FlushPendingHudAlert then
+                if EZOAlerts_Renderer.FlushPendingHudAlert() == true then
+                    return
+                end
+            end
             if EZOAlerts_Renderer and EZOAlerts_Renderer.RefreshVisibility then
                 EZOAlerts_Renderer.RefreshVisibility()
             end
@@ -510,6 +515,40 @@ function MOD.Hide()
     if MOD.control then
         MOD.control:SetHidden(true)
     end
+end
+
+function MOD.ShowWhenHud(text, kind, options)
+    local sv = EZOAlerts and EZOAlerts.sv and EZOAlerts.sv.alerts
+    if sv and sv.enabled == false then
+        return false
+    end
+
+    text = tostring(text or "")
+    if text == "" then
+        return false
+    end
+
+    if CanShowWindow() then
+        return MOD.Show(text, kind, options)
+    end
+
+    MOD.pendingHudAlert = {
+        text = text,
+        kind = kind or EZOAlerts.ALERT_KIND_INFO,
+        options = options,
+    }
+    return true
+end
+
+function MOD.FlushPendingHudAlert()
+    if not MOD.pendingHudAlert or not CanShowWindow() then
+        return false
+    end
+
+    local pending = MOD.pendingHudAlert
+    MOD.pendingHudAlert = nil
+    MOD.Show(pending.text, pending.kind, pending.options)
+    return true
 end
 
 function MOD.HideByKey(key)

@@ -117,7 +117,7 @@ function EZOA.RegisterWithEZOCore()
             id = "ezoalerts",
             name = EZOA.ADDON_NAME or ADDON_NAME,
             version = EZOA.ADDON_VERSION or "0.0.0",
-            addOnVersion = 10024,
+            addOnVersion = 10026,
             apiVersion = 1,
             capabilities = {
                 "alerts.screen",

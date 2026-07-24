@@ -15,8 +15,8 @@ The addon currently focuses on group and role-awareness alerts. It does not repl
 
 ## Version Metadata
 
-- Addon version: `0.1.25`
-- AddOnVersion: `10025`
+- Addon version: `0.1.26`
+- AddOnVersion: `10026`
 - APIVersion: `101049 101050`
 - Status: public beta
 
@@ -116,7 +116,7 @@ Configuration sections use EZO-style informational headers with a purple help ic
   - Alert scale.
   - Screen position anchor.
   - One-drag alert-window positioning action using the test-alert visual.
-  - Show test alert without moving the window.
+  - Show test alert without moving the window; when launched from Settings, it appears after returning to the HUD.
   - Send test group message.
 
 - Treasure alerts:
@@ -155,7 +155,7 @@ Group-chat alerts are intentionally constrained by addon settings, group state a
 - If EZOCore debug controls are available, confirm the shared disable action can turn off EZOAlerts `Log`.
 - With EZOCore disabled, confirm the standalone LibAddonMenu panel is available.
 - Switch language between automatic, English and Spanish.
-- Use the test screen alert.
+- Use the test screen alert, closing Settings after pressing the button so the HUD-only window can appear.
 - Use the one-drag positioning action and confirm it shows the same visual sample as the test alert, stays visible while positioning and hides after releasing the drag.
 - Use the test group message while grouped.
 - In a group with compatible EZOCore transport, open a chest or heavy sack and confirm compatible clients show the temporary HUD alert when the matching producer and on-screen alerts are enabled.
