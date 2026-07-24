@@ -230,28 +230,20 @@ local function GetOptions()
             width   = "half",
         },
         {
-            type    = "button",
+            type    = "checkbox",
             name    = GetString(EZOA_OPTION_MOVE_WINDOW),
             tooltip = GetString(EZOA_OPTION_MOVE_WINDOW_TOOLTIP),
-            func    = function()
-                if EZOAlerts_Renderer and EZOAlerts_Renderer.StartTemporaryMove then
-                    EZOAlerts_Renderer.StartTemporaryMove()
+            getFunc = function()
+                return EZOAlerts_Renderer
+                    and EZOAlerts_Renderer.IsMoveMode
+                    and EZOAlerts_Renderer.IsMoveMode() == true
+            end,
+            setFunc = function(value)
+                if EZOAlerts_Renderer and EZOAlerts_Renderer.SetMoveMode then
+                    EZOAlerts_Renderer.SetMoveMode(value == true)
                 end
             end,
-            width   = "full",
-        },
-        {
-            type    = "button",
-            name    = GetString(EZOA_OPTION_TEST_ALERT),
-            tooltip = GetString(EZOA_OPTION_TEST_ALERT_TOOLTIP),
-            func    = function()
-                if EZOAlerts_Renderer and EZOAlerts_Renderer.ShowWhenHud then
-                    EZOAlerts_Renderer.ShowWhenHud(GetString(EZOA_TEST_ALERT_TEXT), EZOAlerts.ALERT_KIND_INFO)
-                elseif EZOAlerts.ShowAlert then
-                    EZOAlerts.ShowAlert(GetString(EZOA_TEST_ALERT_TEXT), EZOAlerts.ALERT_KIND_INFO)
-                end
-            end,
-            disabled = function() return EZOA.sv.channels.screen ~= true end,
+            default = false,
             width   = "full",
         },
         {

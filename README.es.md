@@ -15,8 +15,8 @@ El addon se centra actualmente en avisos de grupo y coherencia de rol. No sustit
 
 ## Metadatos de versión
 
-- Versión del addon: `0.1.26`
-- AddOnVersion: `10026`
+- Versión del addon: `0.1.27`
+- AddOnVersion: `10027`
 - APIVersion: `101049 101050`
 - Estado: beta pública
 
@@ -44,7 +44,7 @@ El addon se centra actualmente en avisos de grupo y coherencia de rol. No sustit
 - Ventana compartida de avisos en pantalla:
   - Visibilidad solo en HUD/HUD UI.
   - Estilos de información, warning y error.
-  - Acción de posicionamiento de un solo arrastre desde el panel de configuración, usando la misma muestra visual que el aviso de prueba, además del modo compartido de disposición de EZOCore cuando está disponible.
+  - Un único toggle de posicionamiento desde el panel de configuración, usando la misma muestra visual que la previsualización del aviso, además del modo compartido de disposición de EZOCore cuando está disponible.
   - Arrastre con botón izquierdo, incluso durante combate.
   - Ajustes de escala, ancla de posición y duración de avisos temporales.
 
@@ -115,8 +115,7 @@ Las secciones de configuración usan cabeceras informativas de estilo EZO con un
   - Duración de avisos temporales en segundos.
   - Escala del aviso.
   - Ancla de posición en pantalla.
-  - Acción de posicionamiento de la ventana para un solo arrastre usando la visual del aviso de prueba.
-  - Mostrar aviso de prueba sin mover la ventana; lanzado desde Ajustes, aparece al volver al HUD.
+  - Toggle de posicionamiento de la ventana usando la visual de previsualización del aviso.
   - Enviar mensaje de grupo de prueba.
 
 - Avisos de tesoros:
@@ -155,8 +154,8 @@ Los avisos al chat de grupo están limitados intencionadamente por la configurac
 - Si los controles de debug de EZOCore están disponibles, confirmar que la acción compartida puede desactivar el `Log` de EZOAlerts.
 - Con EZOCore desactivado, confirmar que está disponible el panel independiente de LibAddonMenu.
 - Cambiar idioma entre automático, inglés y español.
-- Usar el aviso de prueba en pantalla, cerrando Ajustes después de pulsar el botón para que pueda aparecer la ventana solo-HUD.
-- Usar la acción de posicionamiento de un solo arrastre y confirmar que muestra la misma muestra visual que el aviso de prueba, permanece visible mientras se posiciona y se oculta al soltar el arrastre.
+- Activar el toggle de posicionamiento de la ventana, cerrar Ajustes y confirmar que la previsualización aparece en el HUD.
+- Arrastrar la previsualización con el botón izquierdo, confirmar que sigue visible al soltar el arrastre, desactivar el toggle de posicionamiento y confirmar que se oculta.
 - Usar el mensaje de grupo de prueba estando en grupo.
 - En un grupo con transporte EZOCore compatible, abrir un cofre o saco pesado y confirmar que los clientes compatibles muestran el aviso temporal HUD cuando el productor correspondiente y los avisos en pantalla están activos.
 - Confirmar que los mensajes de cofres y sacos pesados no se activan fuera de grupo.

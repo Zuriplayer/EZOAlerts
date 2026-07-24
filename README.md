@@ -15,8 +15,8 @@ The addon currently focuses on group and role-awareness alerts. It does not repl
 
 ## Version Metadata
 
-- Addon version: `0.1.26`
-- AddOnVersion: `10026`
+- Addon version: `0.1.27`
+- AddOnVersion: `10027`
 - APIVersion: `101049 101050`
 - Status: public beta
 
@@ -44,7 +44,7 @@ The addon currently focuses on group and role-awareness alerts. It does not repl
 - Shared on-screen alert window:
   - HUD/HUD UI-only visibility.
   - Info, warning and error styles.
-  - One-drag positioning action from the configuration panel, using the same visual sample as the test alert, plus the EZOCore shared layout mode when available.
+  - Single positioning toggle from the configuration panel, using the same visual sample as the alert preview, plus the EZOCore shared layout mode when available.
   - Left-mouse-button dragging, including while in combat.
   - Scale, anchor and temporary-alert duration settings.
 
@@ -115,8 +115,7 @@ Configuration sections use EZO-style informational headers with a purple help ic
   - Temporary alert duration in seconds.
   - Alert scale.
   - Screen position anchor.
-  - One-drag alert-window positioning action using the test-alert visual.
-  - Show test alert without moving the window; when launched from Settings, it appears after returning to the HUD.
+  - Alert-window positioning toggle using the alert preview visual.
   - Send test group message.
 
 - Treasure alerts:
@@ -155,8 +154,8 @@ Group-chat alerts are intentionally constrained by addon settings, group state a
 - If EZOCore debug controls are available, confirm the shared disable action can turn off EZOAlerts `Log`.
 - With EZOCore disabled, confirm the standalone LibAddonMenu panel is available.
 - Switch language between automatic, English and Spanish.
-- Use the test screen alert, closing Settings after pressing the button so the HUD-only window can appear.
-- Use the one-drag positioning action and confirm it shows the same visual sample as the test alert, stays visible while positioning and hides after releasing the drag.
+- Turn on the alert-window positioning toggle, close Settings and confirm the preview appears in the HUD.
+- Drag the preview with the left mouse button, confirm it stays visible after releasing the drag, then turn the positioning toggle off and confirm it hides.
 - Use the test group message while grouped.
 - In a group with compatible EZOCore transport, open a chest or heavy sack and confirm compatible clients show the temporary HUD alert when the matching producer and on-screen alerts are enabled.
 - Confirm chest and heavy sack messages do not trigger outside a group.

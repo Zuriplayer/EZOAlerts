@@ -195,11 +195,6 @@ local function RegisterSceneFragments(control)
 
     if SCENE_MANAGER and type(SCENE_MANAGER.RegisterCallback) == "function" then
         SCENE_MANAGER:RegisterCallback("SceneStateChanged", function()
-            if EZOAlerts_Renderer and EZOAlerts_Renderer.FlushPendingHudAlert then
-                if EZOAlerts_Renderer.FlushPendingHudAlert() == true then
-                    return
-                end
-            end
             if EZOAlerts_Renderer and EZOAlerts_Renderer.RefreshVisibility then
                 EZOAlerts_Renderer.RefreshVisibility()
             end
@@ -419,9 +414,6 @@ local function EnsureControl()
         MOD.dragActive = false
         control:SetMovable(false)
         SaveCurrentPosition()
-        if MOD.temporaryMove == true then
-            MOD.SetMoveMode(false)
-        end
     end)
 
     local backdrop = wm:CreateControl(CONTROL_NAME .. "Backdrop", control, CT_BACKDROP)
@@ -476,7 +468,6 @@ end
 
 function MOD.Init()
     MOD.moveMode = false
-    MOD.temporaryMove = false
     MOD.inCombat = false
     EnsureControl()
     ApplyPlacement()
@@ -517,40 +508,6 @@ function MOD.Hide()
     end
 end
 
-function MOD.ShowWhenHud(text, kind, options)
-    local sv = EZOAlerts and EZOAlerts.sv and EZOAlerts.sv.alerts
-    if sv and sv.enabled == false then
-        return false
-    end
-
-    text = tostring(text or "")
-    if text == "" then
-        return false
-    end
-
-    if CanShowWindow() then
-        return MOD.Show(text, kind, options)
-    end
-
-    MOD.pendingHudAlert = {
-        text = text,
-        kind = kind or EZOAlerts.ALERT_KIND_INFO,
-        options = options,
-    }
-    return true
-end
-
-function MOD.FlushPendingHudAlert()
-    if not MOD.pendingHudAlert or not CanShowWindow() then
-        return false
-    end
-
-    local pending = MOD.pendingHudAlert
-    MOD.pendingHudAlert = nil
-    MOD.Show(pending.text, pending.kind, pending.options)
-    return true
-end
-
 function MOD.HideByKey(key)
     if key == nil or MOD.currentKey == key then
         MOD.Hide()
@@ -587,9 +544,6 @@ end
 
 function MOD.SetMoveMode(enabled)
     MOD.moveMode = enabled == true
-    if not MOD.moveMode then
-        MOD.temporaryMove = false
-    end
     EnsureControl()
     ApplyPlacement()
 
@@ -599,8 +553,7 @@ function MOD.SetMoveMode(enabled)
         MOD.hasTitle = false
         ApplyActionButtons(nil)
         local style = ApplyStyle(EZOAlerts.ALERT_KIND_INFO)
-        local previewStringId = MOD.temporaryMove and EZOA_TEST_ALERT_TEXT or EZOA_ALERT_MOVE_PREVIEW
-        MOD.label:SetText(GetString(previewStringId))
+        MOD.label:SetText(GetString(EZOA_TEST_ALERT_TEXT))
         MOD.label:SetColor(style.body[1], style.body[2], style.body[3], style.body[4])
         MOD.isShowing = true
         MOD.isPreview = true
@@ -610,11 +563,6 @@ function MOD.SetMoveMode(enabled)
     end
 
     MOD.RefreshVisibility()
-end
-
-function MOD.StartTemporaryMove()
-    MOD.temporaryMove = true
-    MOD.SetMoveMode(true)
 end
 
 function MOD.IsMoveMode()
